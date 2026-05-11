@@ -620,6 +620,14 @@
       color: var(--uk-blue);
       font-weight: 600;
     }
+    .term-compare .past-marker {
+      font-family: var(--sans);
+      font-weight: 500;
+      font-size: 0.82rem;
+      color: var(--med-gray);
+      font-style: italic;
+      letter-spacing: 0;
+    }
     .term-compare .compare-note {
       font-size: 0.83rem;
       color: var(--med-gray);
@@ -1436,18 +1444,18 @@ function evaluate(input) {
         notif: effectiveNotifDeadline,
         chairBy: chairApprovalBy,
         distBy: committeeDistBy,
-        defense: planningDefense,
-        finalETD: term.finalETDDeadline,
-        latest: term.examSitDeadline
+        recommended: recommendedReachable ? recommendedDefense : null,
+        latest: term.examSitDeadline,
+        finalETD: term.finalETDDeadline
       },
       nextTerm: {
         label: nt.label,
         notif: ntNotif,
         chairBy: ntChairBy,
         distBy: ntDistBy,
-        defense: ntRec >= today ? ntRec : nt.examSitDeadline,
-        finalETD: nt.finalETDDeadline,
-        latest: nt.examSitDeadline
+        recommended: ntRec >= today ? ntRec : null,
+        latest: nt.examSitDeadline,
+        finalETD: nt.finalETDDeadline
       }
     };
   }
@@ -1589,18 +1597,19 @@ function renderTermComparison(result) {
   if (!result.termComparison) return null;
   const { thisTerm, nextTerm } = result.termComparison;
   const rows = [
-    ["Recommended defense", thisTerm.defense, nextTerm.defense, "60 days before final ETD"],
+    ["Recommended defense", thisTerm.recommended, nextTerm.recommended, "60 days before final ETD — full revision window"],
     ["NOTIF deadline", thisTerm.notif, nextTerm.notif, "8 weeks before recommended defense (or calendar deadline, whichever is earlier)"],
     ["Chair approval of complete draft", thisTerm.chairBy, nextTerm.chairBy, "~10 weeks before defense"],
     ["Distribute to full committee", thisTerm.distBy, nextTerm.distBy, "~8 weeks before defense"],
     ["Latest allowable defense", thisTerm.latest, nextTerm.latest, "Term-end backstop, not advised"],
     ["Final ETD acceptance", thisTerm.finalETD, nextTerm.finalETD, "Degree confers only after this"]
   ];
+  const fmt = d => d ? prettyDate(d) : '<span class="past-marker">Already past — see latest allowable below</span>';
   const rowHtml = rows.map(([label, a, b, note]) => `
     <tr>
       <td>${label}<span class="compare-note">${note}</span></td>
-      <td class="compare-dates">${prettyDate(a)}</td>
-      <td class="compare-dates">${prettyDate(b)}</td>
+      <td class="compare-dates">${fmt(a)}</td>
+      <td class="compare-dates">${fmt(b)}</td>
     </tr>
   `).join("");
   return `
@@ -1796,15 +1805,16 @@ function buildTextReport(result) {
     lines.push("  Milestone                       " + padRight(thisTerm.label, 14) + "  " + nextTerm.label);
     lines.push("  " + "-".repeat(30) + "  " + "-".repeat(14) + "  " + "-".repeat(14));
     const rows = [
-      ["Recommended defense", thisTerm.defense, nextTerm.defense],
+      ["Recommended defense", thisTerm.recommended, nextTerm.recommended],
       ["NOTIF deadline", thisTerm.notif, nextTerm.notif],
       ["Chair approval by", thisTerm.chairBy, nextTerm.chairBy],
       ["Distribute to committee", thisTerm.distBy, nextTerm.distBy],
       ["Latest allowable", thisTerm.latest, nextTerm.latest],
       ["Final ETD", thisTerm.finalETD, nextTerm.finalETD]
     ];
+    const fmtCell = d => d ? prettyDate(d) : "(already past)";
     rows.forEach(([label, a, b]) => {
-      lines.push("  " + padRight(label, 30) + "  " + padRight(prettyDate(a), 14) + "  " + prettyDate(b));
+      lines.push("  " + padRight(label, 30) + "  " + padRight(fmtCell(a), 14) + "  " + fmtCell(b));
     });
     lines.push("");
   }
