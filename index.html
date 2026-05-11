@@ -1,0 +1,2010 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Defense Readiness Check — UK EdD / PhD</title>
+  <style>
+    /* ===== UK Brand-aligned tokens ===== */
+    :root {
+      --uk-blue:      #0033A0;
+      --uk-blue-deep: #00226b;
+      --uk-blue-soft: #e8eef9;
+      --steel-blue:   #4A90D9;
+      --uk-gold:      #C1A875;
+      --white:        #FFFFFF;
+      --near-white:   #F5F5F5;
+      --light-gray:   #D1D3D4;
+      --med-gray:     #6D6E71;
+      --dark-gray:    #231F20;
+      --go:           #1f7a3a;
+      --tight:        #b07f12;
+      --not-yet:      #b25a06;
+      --no:           #a31a1a;
+
+      --display: Georgia, "Times New Roman", serif;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+      --radius: 4px;
+      --radius-lg: 8px;
+      --shadow: 0 1px 2px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.04);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: var(--sans);
+      color: var(--dark-gray);
+      background: var(--near-white);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== Header ===== */
+    header.banner {
+      background: var(--uk-blue);
+      color: var(--white);
+      padding: 2.5rem 1.5rem 2.25rem;
+      border-bottom: 6px solid var(--uk-gold);
+    }
+    header.banner .inner {
+      max-width: 920px;
+      margin: 0 auto;
+    }
+    header.banner .eyebrow {
+      font-family: var(--sans);
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--uk-gold);
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+    header.banner h1 {
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: clamp(1.85rem, 4vw, 2.6rem);
+      margin: 0 0 0.4rem;
+      line-height: 1.1;
+    }
+    header.banner p.tag {
+      font-size: 1.02rem;
+      margin: 0;
+      color: rgba(255,255,255,0.92);
+      max-width: 60ch;
+    }
+
+    /* ===== Main layout ===== */
+    main {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 5rem;
+    }
+    .intro {
+      background: var(--white);
+      border: 1px solid var(--light-gray);
+      border-left: 4px solid var(--uk-blue);
+      padding: 1.2rem 1.4rem 1.3rem;
+      margin-bottom: 1.75rem;
+      border-radius: var(--radius);
+    }
+    .intro-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    .intro-h {
+      font-family: var(--sans);
+      font-weight: 700;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--uk-blue);
+      margin: 0 0 0.45rem;
+    }
+    .intro-grid div p:not(.intro-h) {
+      margin: 0;
+      font-size: 0.94rem;
+      color: var(--dark-gray);
+      line-height: 1.5;
+    }
+    .intro-callout {
+      margin-top: 1.15rem;
+      padding: 0.8rem 1.1rem;
+      background: #fff7e6;
+      border: 1px solid var(--uk-gold);
+      border-left: 4px solid var(--uk-gold);
+      border-radius: var(--radius);
+      font-size: 0.95rem;
+      color: var(--dark-gray);
+    }
+    .intro-callout strong {
+      color: var(--uk-blue-deep);
+    }
+    .intro-verify {
+      margin: 1rem 0 0;
+      font-size: 0.85rem;
+      color: var(--med-gray);
+      font-style: italic;
+    }
+    @media (max-width: 600px) {
+      .intro-grid { grid-template-columns: 1fr; gap: 0.9rem; }
+    }
+
+    /* Resources block (footer) */
+    .resources {
+      background: var(--white);
+      border: 1px solid var(--light-gray);
+      border-left: 4px solid var(--uk-blue);
+      padding: 1.1rem 1.3rem 1.2rem;
+      margin: 0 0 1.5rem;
+      border-radius: var(--radius);
+    }
+    .resources-title {
+      font-family: var(--sans);
+      font-weight: 700;
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--uk-blue);
+      margin: 0 0 0.75rem;
+    }
+    .resources-list {
+      list-style: none;
+      margin: 0 0 0.85rem;
+      padding: 0;
+    }
+    .resources-list li {
+      padding: 0.5rem 0;
+      font-size: 0.95rem;
+      border-bottom: 1px solid var(--near-white);
+      line-height: 1.45;
+    }
+    .resources-list li:last-child { border-bottom: none; }
+    .resources-list a {
+      color: var(--uk-blue);
+      word-break: break-word;
+    }
+    .resources-list strong {
+      color: var(--dark-gray);
+    }
+    .resources-note {
+      font-size: 0.86rem;
+      color: var(--med-gray);
+      font-style: italic;
+      margin: 0;
+    }
+
+    /* ===== Form card ===== */
+    .card {
+      background: var(--white);
+      border: 1px solid var(--light-gray);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      padding: 1.75rem 1.75rem 1.5rem;
+    }
+    .card + .card { margin-top: 1.5rem; }
+
+    .section-title {
+      font-family: var(--sans);
+      font-weight: 700;
+      font-size: 0.78rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--uk-blue);
+      margin: 0 0 1.1rem;
+    }
+
+    .field { margin-bottom: 1.35rem; }
+    .field:last-child { margin-bottom: 0.5rem; }
+    .field label.q {
+      display: block;
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--dark-gray);
+      margin-bottom: 0.45rem;
+    }
+    .field .hint {
+      font-size: 0.85rem;
+      color: var(--med-gray);
+      margin-bottom: 0.55rem;
+    }
+
+    select, input[type="date"] {
+      width: 100%;
+      max-width: 460px;
+      padding: 0.6rem 0.7rem;
+      font-family: var(--sans);
+      font-size: 1rem;
+      color: var(--dark-gray);
+      background: var(--white);
+      border: 1px solid var(--light-gray);
+      border-radius: var(--radius);
+      transition: border-color 0.15s;
+    }
+    select:focus, input[type="date"]:focus {
+      outline: none;
+      border-color: var(--uk-blue);
+      box-shadow: 0 0 0 3px rgba(0,51,160,0.15);
+    }
+
+    .radio-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .radio-group label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45rem 0.8rem;
+      background: var(--near-white);
+      border: 1px solid var(--light-gray);
+      border-radius: var(--radius);
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .radio-group label:hover { border-color: var(--steel-blue); }
+    .radio-group input[type="radio"] {
+      accent-color: var(--uk-blue);
+      margin: 0;
+    }
+    .radio-group label.checked {
+      background: var(--uk-blue-soft);
+      border-color: var(--uk-blue);
+      color: var(--uk-blue-deep);
+      font-weight: 600;
+    }
+
+    .conditional {
+      margin-top: 0.5rem;
+      padding-left: 0.85rem;
+      border-left: 3px solid var(--uk-gold);
+    }
+    .conditional[hidden] { display: none; }
+
+    .actions {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+    button.primary {
+      background: var(--uk-blue);
+      color: var(--white);
+      border: none;
+      padding: 0.8rem 1.5rem;
+      font-family: var(--sans);
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    button.primary:hover { background: var(--uk-blue-deep); }
+    button.primary:focus { outline: 3px solid var(--steel-blue); outline-offset: 2px; }
+    button.secondary {
+      background: transparent;
+      color: var(--uk-blue);
+      border: 1px solid var(--uk-blue);
+      padding: 0.75rem 1.2rem;
+      font-family: var(--sans);
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: var(--radius);
+      cursor: pointer;
+    }
+    button.secondary:hover { background: var(--uk-blue-soft); }
+
+    /* ===== Results ===== */
+    #results { margin-top: 2rem; }
+    #results[hidden] { display: none; }
+
+    .verdict {
+      padding: 1.5rem 1.75rem;
+      border-radius: var(--radius-lg);
+      color: var(--white);
+      box-shadow: var(--shadow);
+    }
+    .verdict .label {
+      font-family: var(--sans);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 0.78rem;
+      opacity: 0.85;
+      margin-bottom: 0.35rem;
+    }
+    .verdict .value {
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: 2.3rem;
+      line-height: 1.05;
+      margin-bottom: 0.5rem;
+    }
+    .verdict .reason {
+      font-size: 1.02rem;
+      margin: 0;
+      max-width: 70ch;
+    }
+    .verdict.go     { background: var(--go); }
+    .verdict.tight  { background: var(--tight); }
+    .verdict.not-yet { background: var(--not-yet); }
+    .verdict.no     { background: var(--no); }
+
+    .result-section { margin-top: 1.5rem; }
+    .result-section h3 {
+      font-family: var(--sans);
+      font-size: 0.78rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--uk-blue);
+      margin: 0 0 0.85rem;
+      font-weight: 700;
+    }
+
+    /* Timeline */
+    .timeline {
+      background: var(--white);
+      border: 1px solid var(--light-gray);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+    }
+    .timeline ol {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      counter-reset: tl;
+    }
+    .timeline li {
+      display: grid;
+      grid-template-columns: 7.5rem 1fr;
+      gap: 1rem;
+      padding: 0.7rem 0;
+      border-bottom: 1px solid var(--near-white);
+      align-items: baseline;
+    }
+    .timeline li:last-child { border-bottom: none; }
+    .timeline .date {
+      font-family: var(--mono);
+      font-size: 0.88rem;
+      color: var(--uk-blue);
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .timeline .event { font-size: 0.96rem; color: var(--dark-gray); }
+    .timeline .event .desc {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--med-gray);
+      margin-top: 0.15rem;
+    }
+    .timeline li.past .date { color: var(--med-gray); text-decoration: line-through; }
+    .timeline li.critical {
+      background: rgba(193, 168, 117, 0.12);
+      margin: 0 -0.5rem;
+      padding: 0.7rem 0.5rem;
+      border-radius: var(--radius);
+      border-bottom: 1px solid var(--near-white);
+    }
+
+    /* Checklist */
+    .checklist {
+      background: var(--white);
+      border: 1px solid var(--light-gray);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+    }
+    .checklist ul { list-style: none; margin: 0; padding: 0; }
+    .checklist li.cat-heading {
+      display: block;
+      padding: 1rem 0 0.45rem;
+      border-bottom: 2px solid var(--uk-blue);
+      margin-bottom: 0.25rem;
+    }
+    .checklist li.cat-heading:first-child { padding-top: 0; }
+    .checklist .cat-label {
+      font-family: var(--sans);
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--uk-blue);
+      font-weight: 700;
+    }
+    .checklist li {
+      padding: 0.55rem 0;
+      display: grid;
+      grid-template-columns: 1.6rem 1fr;
+      gap: 0.6rem;
+      border-bottom: 1px solid var(--near-white);
+      font-size: 0.96rem;
+    }
+    .checklist li:last-child { border-bottom: none; }
+    .checklist .mark {
+      font-weight: 700;
+      font-size: 1.05rem;
+      line-height: 1.3;
+    }
+    .checklist .ok    .mark { color: var(--go); }
+    .checklist .warn  .mark { color: var(--tight); }
+    .checklist .miss  .mark { color: var(--no); }
+    .checklist .detail {
+      display: block;
+      color: var(--med-gray);
+      font-size: 0.86rem;
+      margin-top: 0.15rem;
+    }
+
+    /* Next term suggestion */
+    .next-term {
+      background: var(--uk-blue-soft);
+      border: 1px solid var(--steel-blue);
+      border-radius: var(--radius-lg);
+      padding: 1.1rem 1.4rem;
+    }
+    .next-term h3 { color: var(--uk-blue-deep); }
+    .next-term p { margin: 0.25rem 0 0; font-size: 0.96rem; }
+
+    /* Off-contract warning */
+    .off-contract-warning {
+      background: #fff7e6;
+      border: 1px solid var(--uk-gold);
+      border-left: 4px solid var(--uk-gold);
+      border-radius: var(--radius-lg);
+      padding: 1.1rem 1.4rem;
+      color: var(--dark-gray);
+    }
+    .off-contract-warning strong { color: var(--uk-blue-deep); }
+    .off-contract-warning ul {
+      margin: 0.6rem 0 0;
+      padding-left: 1.2rem;
+      font-size: 0.94rem;
+    }
+    .off-contract-warning li { padding: 0.15rem 0; }
+
+    /* Copy actions */
+    .copy-actions {
+      display: flex;
+      gap: 0.85rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .copy-feedback {
+      font-size: 0.92rem;
+      color: var(--go);
+      font-weight: 600;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .copy-feedback.visible { opacity: 1; }
+    .copy-hint {
+      font-size: 0.85rem;
+      color: var(--med-gray);
+      margin: 0.55rem 0 0;
+    }
+
+    /* Defense date highlight in timeline */
+    .timeline li.recommended {
+      background: rgba(74, 144, 217, 0.10);
+      margin: 0 -0.5rem;
+      padding: 0.7rem 0.5rem;
+      border-radius: var(--radius);
+      border-bottom: 1px solid var(--near-white);
+    }
+    .timeline .badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: var(--steel-blue);
+      color: var(--white);
+      padding: 0.12rem 0.45rem;
+      border-radius: 3px;
+      margin-left: 0.4rem;
+      vertical-align: middle;
+      font-weight: 600;
+    }
+    .timeline .badge.latest {
+      background: var(--med-gray);
+    }
+
+    /* Next actions */
+    .next-actions {
+      background: var(--white);
+      border: 1px solid var(--light-gray);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+    }
+    .next-actions ol {
+      margin: 0;
+      padding-left: 1.4rem;
+      list-style: decimal;
+    }
+    .next-actions li {
+      padding: 0.55rem 0;
+      border-bottom: 1px solid var(--near-white);
+      font-size: 0.97rem;
+    }
+    .next-actions li:last-child { border-bottom: none; }
+    .next-actions .action-deadline {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      color: var(--uk-blue);
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      display: block;
+      margin-bottom: 0.1rem;
+    }
+    .next-actions .action-note {
+      display: block;
+      color: var(--med-gray);
+      font-size: 0.85rem;
+      margin-top: 0.1rem;
+    }
+
+    /* Term comparison */
+    .term-compare {
+      background: var(--white);
+      border: 1px solid var(--light-gray);
+      border-radius: var(--radius-lg);
+      padding: 1.1rem 1.4rem;
+      overflow-x: auto;
+    }
+    .term-compare table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.93rem;
+    }
+    .term-compare th,
+    .term-compare td {
+      text-align: left;
+      padding: 0.55rem 0.75rem;
+      border-bottom: 1px solid var(--near-white);
+      vertical-align: top;
+    }
+    .term-compare th {
+      font-family: var(--sans);
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--uk-blue);
+      font-weight: 700;
+      border-bottom: 2px solid var(--uk-blue);
+    }
+    .term-compare th:first-child {
+      color: var(--med-gray);
+    }
+    .term-compare td:first-child {
+      font-weight: 600;
+      color: var(--dark-gray);
+    }
+    .term-compare .compare-dates {
+      font-family: var(--mono);
+      font-size: 0.88rem;
+      color: var(--uk-blue);
+      font-weight: 600;
+    }
+    .term-compare .compare-note {
+      font-size: 0.83rem;
+      color: var(--med-gray);
+      margin-top: 0.15rem;
+      display: block;
+    }
+    .term-compare-message {
+      font-size: 0.91rem;
+      color: var(--dark-gray);
+      margin: 0 0 0.85rem;
+    }
+
+    /* Subtle verdict footnote */
+    .verdict .footnote {
+      display: block;
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid rgba(255,255,255,0.25);
+      font-size: 0.83rem;
+      font-style: italic;
+      opacity: 0.85;
+    }
+
+    /* Footer */
+    footer {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 1.5rem 1.5rem 3rem;
+      color: var(--med-gray);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--light-gray);
+    }
+    footer a { color: var(--uk-blue); }
+    footer strong { color: var(--dark-gray); }
+
+    @media (max-width: 600px) {
+      header.banner { padding: 1.75rem 1.25rem 1.5rem; }
+      .card { padding: 1.25rem; }
+      .verdict { padding: 1.25rem; }
+      .verdict .value { font-size: 1.85rem; }
+      .timeline li { grid-template-columns: 1fr; gap: 0.15rem; }
+      .timeline .date { font-size: 0.82rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="banner">
+  <div class="inner">
+    <div class="eyebrow">EdD / PhD · College of Education · Educational Leadership</div>
+    <h1>Defense Readiness Check</h1>
+    <p class="tag">A planning tool that runs your situation against the Graduate School calendar, the NOTIF eight-week rule, and the 767 enrollment requirement, and tells you whether the term you want is realistic.</p>
+  </div>
+</header>
+
+<main>
+
+  <div class="intro">
+    <div class="intro-grid">
+      <div>
+        <p class="intro-h">What this tool is</p>
+        <p>A planning aid for the procedural side of defense timing: NOTIF, calendar deadlines, milestones, enrollment, and how your target term maps onto real dates.</p>
+      </div>
+      <div>
+        <p class="intro-h">What it isn't</p>
+        <p>A substitute for your chair, committee, or DGS. It can't read your draft, judge defense readiness, or override Graduate School guidance.</p>
+      </div>
+    </div>
+    <div class="intro-callout">
+      <strong>Faculty are off-contract May 15 – August 15.</strong> If your plan depends on summer faculty work, your plan needs to change.
+    </div>
+    <p class="intro-verify">Always confirm with your chair, your DGS, and the Graduate School before acting.</p>
+  </div>
+
+  <form id="form" class="card" novalidate>
+    <p class="section-title">Tell us where you are</p>
+
+    <div class="field">
+      <label class="q">Which doctoral program are you in?</label>
+      <div class="hint">Determines which pre-defense prerequisites apply.</div>
+      <div class="radio-group" data-name="program">
+        <label><input type="radio" name="program" value="phd"> PhD</label>
+        <label><input type="radio" name="program" value="edd"> EdD</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="q" for="term">Which term are you targeting?</label>
+      <div class="hint">"As soon as possible" picks the soonest term whose deadlines you haven't already missed.</div>
+      <select id="term" name="term">
+        <option value="asap">As soon as possible</option>
+        <option value="summer-2026">Summer 2026 (August degree)</option>
+        <option value="fall-2026">Fall 2026 (December degree)</option>
+        <option value="spring-2027">Spring 2027 (May degree)</option>
+        <option value="summer-2027">Summer 2027 (August degree)</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label class="q" for="today">Today's date</label>
+      <div class="hint">Auto-filled. Override to plan a what-if scenario from a different reference date.</div>
+      <input type="date" id="today" name="today">
+    </div>
+
+    <div class="field conditional" id="progressPhdField">
+      <label class="q">Where is your dissertation work — concretely?</label>
+      <div class="hint">PhD progress check. Be honest — the verdict below is only as accurate as this answer.</div>
+      <div class="radio-group" data-name="progressPhd">
+        <label><input type="radio" name="progressPhd" value="ready"> Defense-ready or near-final draft of the whole dissertation</label>
+        <label><input type="radio" name="progressPhd" value="drafted"> Data collected and Ch. 4 and 5 drafted; revisions and integration ongoing</label>
+        <label><input type="radio" name="progressPhd" value="writing"> Data collected; Ch. 4 and 5 still in active writing</label>
+        <label><input type="radio" name="progressPhd" value="collecting"> Still collecting or analyzing data</label>
+        <label><input type="radio" name="progressPhd" value="early"> Earlier than that (proposal stage or before)</label>
+      </div>
+    </div>
+
+    <div class="field conditional" id="progressEddField">
+      <label class="q">Where is your dissertation work — concretely?</label>
+      <div class="hint">EdD progress check. Be honest — the verdict below is only as accurate as this answer.</div>
+      <div class="radio-group" data-name="progressEdd">
+        <label><input type="radio" name="progressEdd" value="ready"> Defense-ready or near-final draft of the whole dissertation</label>
+        <label><input type="radio" name="progressEdd" value="drafted"> Evaluation data analyzed; results, monitoring, and conclusions drafted; revisions and integration ongoing</label>
+        <label><input type="radio" name="progressEdd" value="writing"> Evaluation data analyzed; results / monitoring / conclusions still in active writing</label>
+        <label><input type="radio" name="progressEdd" value="collecting"> Still collecting or analyzing evaluation-phase data</label>
+        <label><input type="radio" name="progressEdd" value="early"> Earlier than that (reconnaissance or planning phase)</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="q">Have you completed two semesters of post-qualifying residency (767)?</label>
+      <div class="hint">You must complete two semesters of 767 after passing your qualifying exam before you can sit for the final defense.</div>
+      <div class="radio-group" data-name="residency">
+        <label><input type="radio" name="residency" value="yes"> Yes, two or more</label>
+        <label><input type="radio" name="residency" value="no"> No, fewer than two</label>
+        <label><input type="radio" name="residency" value="unsure"> Not sure</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="q">Is a complete draft of the dissertation in your committee chair's hands — and has your chair reviewed and approved it for distribution?</label>
+      <div class="hint">The formal NOTIF rule: chair must have a complete draft that they have reviewed and approved before NOTIF can be filed. "Sent but not reviewed" does not count.</div>
+      <div class="radio-group" data-name="chairDraft">
+        <label><input type="radio" name="chairDraft" value="yes"> Yes — chair has reviewed and approved</label>
+        <label><input type="radio" name="chairDraft" value="no"> Not yet</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="q">Have all your committee members had the chance to review at least some part of your dissertation?</label>
+      <div class="hint">The EDL Dissertation Defense page asks the student to have every committee member review at least some part before NOTIF — and you verify this on the form itself.</div>
+      <div class="radio-group" data-name="committee">
+        <label><input type="radio" name="committee" value="none"> No one has seen anything substantive</label>
+        <label><input type="radio" name="committee" value="chair"> Only my chair</label>
+        <label><input type="radio" name="committee" value="some"> Some members, not all</label>
+        <label><input type="radio" name="committee" value="all"> All members</label>
+      </div>
+    </div>
+
+    <div class="field conditional" id="enrollmentField">
+      <label class="q">For your target term, will you be enrolled in 767 (or 2hr post-residency)?</label>
+      <div class="hint">During the academic year (fall and spring), Graduate School policy is clear: you cannot defend without 767 (or 2hr post-residency) enrollment in that term. Summer is exempt if you are scheduled to defend.</div>
+      <div class="radio-group" data-name="enrollment">
+        <label><input type="radio" name="enrollment" value="yes"> Yes, enrollment is confirmed</label>
+        <label><input type="radio" name="enrollment" value="no"> No, I won't be enrolled</label>
+        <label><input type="radio" name="enrollment" value="unsure"> Not sure yet</label>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="primary" id="checkBtn">Check Readiness</button>
+      <button type="button" class="secondary" id="resetBtn">Reset</button>
+    </div>
+  </form>
+
+  <section id="results" hidden aria-live="polite">
+    <div id="verdictBox"></div>
+    <div class="result-section" id="offContractSection" hidden>
+      <h3>Summer off-contract conflict</h3>
+      <div class="off-contract-warning" id="offContractWarning"></div>
+    </div>
+    <div class="result-section" id="nextActionsSection" hidden>
+      <h3>What you need to do, in order</h3>
+      <div class="next-actions" id="nextActions"></div>
+    </div>
+    <div class="result-section">
+      <h3>Backward-mapped timeline</h3>
+      <div class="timeline" id="timeline"></div>
+    </div>
+    <div class="result-section">
+      <h3>Outstanding items</h3>
+      <div class="checklist" id="checklist"></div>
+    </div>
+    <div class="result-section" id="termCompareSection" hidden>
+      <h3>This term vs the next</h3>
+      <div class="term-compare" id="termCompare"></div>
+    </div>
+    <div class="result-section" id="nextTermSection" hidden>
+      <h3>If this term doesn't work</h3>
+      <div class="next-term" id="nextTerm"></div>
+    </div>
+    <div class="result-section">
+      <div class="copy-actions">
+        <button type="button" class="primary" id="copyReportBtn">Copy report for advisor / DGS</button>
+        <button type="button" class="secondary" id="shareLinkBtn">Copy shareable link</button>
+        <span class="copy-feedback" id="copyFeedback" aria-live="polite"></span>
+      </div>
+      <p class="copy-hint"><strong>Copy report</strong> puts a plain-text version of this report on your clipboard — paste into an email to your chair, committee, or DGS to drive a focused planning conversation. <strong>Copy shareable link</strong> generates a URL that, when opened, restores these exact answers and re-runs the check — useful for advisors to send to a student, or for a student to bookmark a what-if scenario.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="resources">
+    <p class="resources-title">For procedural answers — go to these first</p>
+    <ul class="resources-list">
+      <li><strong>Call the DGS office.</strong> <a href="tel:+18592577845">859-257-7845</a></li>
+      <li><strong>Read the DGS Manual.</strong> <a href="https://gradschool.uky.edu/sites/default/files/2025-01/dgsmanual_2024-25-final.pdf" target="_blank" rel="noopener">UK Graduate School DGS Manual (PDF, 2024–25)</a></li>
+      <li><strong>Search the EDL Doctoral Students SharePoint.</strong> <a href="https://luky.sharepoint.com/sites/EDLDocStudentsHomePage" target="_blank" rel="noopener">EDL Doc Students Home</a></li>
+      <li><strong>Bookmark the Academic Calendar.</strong> <a href="https://registrar.uky.edu/calendars/academic-calendar" target="_blank" rel="noopener">UK Office of the Registrar — Academic Calendar</a></li>
+    </ul>
+    <p class="resources-note">This tool is a personal planning sketch on top of those canonical sources, not a substitute for them. The DGS office, manual, SharePoint, and registrar's calendar are where the authoritative answers live.</p>
+  </div>
+  <p><strong>Sources.</strong> University of Kentucky Office of the Registrar academic calendars (Summer 2026 – Summer 2027). UK Graduate School Doctoral Checklist. EDL Doctoral Students SharePoint &mdash; The Dissertation Defense page. Verify all dates and rules with the Graduate School and your DGS before acting.</p>
+  <p style="margin-top:0.5rem;">v6 &middot; built for EDL doctoral advising &middot; not an official Graduate School product.</p>
+</footer>
+
+<script>
+/* =====================================================
+   Defense Readiness Check — logic kernel
+   ===================================================== */
+
+const TERMS = {
+  "summer-2026": {
+    key: "summer-2026",
+    label: "Summer 2026",
+    degreeLabel: "August 2026 degree",
+    type: "summer",
+    sessionBegins:             "2026-05-18",
+    degreeApplicationDeadline: "2026-06-01",
+    notifDeadline:             "2026-06-19",
+    examScheduleDeadline:      "2026-07-14",
+    examSitDeadline:           "2026-07-28",
+    formatReviewDeadline:      "2026-08-05",
+    finalETDDeadline:          "2026-08-12",
+    sessionEnds:               "2026-08-12"
+  },
+  "fall-2026": {
+    key: "fall-2026",
+    label: "Fall 2026",
+    degreeLabel: "December 2026 degree",
+    type: "fall",
+    sessionBegins:             "2026-08-24",
+    notifDeadline:             "2026-09-18",
+    degreeApplicationDeadline: "2026-11-01",
+    examScheduleDeadline:      "2026-11-19",
+    examSitDeadline:           "2026-12-03",
+    formatReviewDeadline:      "2026-12-11",
+    finalETDDeadline:          "2026-12-18",
+    sessionEnds:               "2026-12-18"
+  },
+  "spring-2027": {
+    key: "spring-2027",
+    label: "Spring 2027",
+    degreeLabel: "May 2027 degree",
+    type: "spring",
+    sessionBegins:             "2027-01-11",
+    notifDeadline:             "2027-02-18",
+    degreeApplicationDeadline: "2027-04-01",
+    examScheduleDeadline:      "2027-04-08",
+    examSitDeadline:           "2027-04-22",
+    formatReviewDeadline:      "2027-04-30",
+    finalETDDeadline:          "2027-05-07",
+    sessionEnds:               "2027-05-07"
+  },
+  "summer-2027": {
+    key: "summer-2027",
+    label: "Summer 2027",
+    degreeLabel: "August 2027 degree",
+    type: "summer",
+    sessionBegins:             "2027-05-17",
+    degreeApplicationDeadline: "2027-06-01",
+    notifDeadline:             "2027-06-13",
+    examScheduleDeadline:      "2027-07-08",
+    examSitDeadline:           "2027-07-22",
+    formatReviewDeadline:      "2027-07-30",
+    finalETDDeadline:          "2027-08-06",
+    sessionEnds:               "2027-08-06"
+  }
+};
+const TERM_ORDER = ["summer-2026", "fall-2026", "spring-2027", "summer-2027"];
+
+const PROGRESS_RANK = {
+  "early":      0,   // proposal/recon — far from defense
+  "collecting": 1,   // data still being gathered
+  "writing":    2,   // data done, key chapters in active writing
+  "drafted":    3,   // key chapters drafted, revisions/integration ongoing
+  "ready":      4    // defense-ready / near-final
+};
+
+/* Planning constants — adjustable */
+const REVISION_BUFFER_DAYS = 60;    // Grad School permits up to 60 days from defense to final ETD
+const NOTIF_LEAD_DAYS      = 56;    // 8 weeks: NOTIF must be submitted this far before defense
+const CHAIR_LEAD_DAYS      = 70;    // ~10 weeks: chair should have approved a complete draft for distribution
+const DIST_LEAD_DAYS       = 56;    // ~8 weeks: committee members should have manuscript
+
+/* ----- Utilities ----- */
+function parseDate(s) { return new Date(s + "T00:00:00"); }
+function daysBetween(a, b) {
+  const ms = parseDate(b) - parseDate(a);
+  return Math.round(ms / 86400000);
+}
+function addDays(d, n) {
+  const x = new Date(d);
+  x.setDate(x.getDate() + n);
+  return x;
+}
+function subDays(dateStr, n) {
+  return isoDate(addDays(parseDate(dateStr), -n));
+}
+function isInOffContract(dateStr) {
+  // Standard chair off-contract window: May 15 — August 15 (inclusive)
+  const [y, m, d] = dateStr.split("-").map(Number);
+  if (m < 5 || m > 8) return false;
+  if (m === 5) return d >= 15;
+  if (m === 8) return d <= 15;
+  return true; // June or July
+}
+function isoDate(d) {
+  if (typeof d === "string") return d;
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+function prettyDate(d) {
+  const dt = typeof d === "string" ? parseDate(d) : d;
+  return dt.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+}
+
+/* ----- Core evaluation ----- */
+function evaluate(input) {
+  const term = TERMS[input.target];
+  const today = input.today;
+
+  // -- Defense dates --
+  // Recommended: defend 60 days before final ETD so the GS-permitted revision window can actually be used.
+  // Latest allowable: the term's exam-sit deadline (absolute backstop, not advised).
+  const recommendedDefense = subDays(term.finalETDDeadline, REVISION_BUFFER_DAYS);
+  const latestDefense = term.examSitDeadline;
+
+  // -- NOTIF dates (both paths) --
+  const calendarNotifDeadline = term.notifDeadline;
+  const eightWeeksBeforeRecommended = subDays(recommendedDefense, NOTIF_LEAD_DAYS);
+  const eightWeeksBeforeLatest      = subDays(latestDefense, NOTIF_LEAD_DAYS);
+  const recommendedNotifEffective = eightWeeksBeforeRecommended < calendarNotifDeadline
+    ? eightWeeksBeforeRecommended : calendarNotifDeadline;
+  const latestNotifEffective = eightWeeksBeforeLatest < calendarNotifDeadline
+    ? eightWeeksBeforeLatest : calendarNotifDeadline;
+
+  // Path reachability — measured at the NOTIF, since that's the binding action
+  const recommendedReachable = recommendedNotifEffective >= today;
+  const latestReachable      = latestNotifEffective      >= today;
+
+  // Planning track: prefer recommended; fall back to latest if recommended path is dead but latest is alive
+  const planningDefense = recommendedReachable ? recommendedDefense : latestDefense;
+  const effectiveNotifDeadline = recommendedReachable ? recommendedNotifEffective : latestNotifEffective;
+  const eightWeeksBeforePlanning = recommendedReachable ? eightWeeksBeforeRecommended : eightWeeksBeforeLatest;
+  const calendarBinds = calendarNotifDeadline <= eightWeeksBeforePlanning;
+
+  // -- Pre-defense milestones (relative to planning defense date) --
+  const chairApprovalBy   = subDays(planningDefense, CHAIR_LEAD_DAYS);
+  const committeeDistBy   = subDays(planningDefense, DIST_LEAD_DAYS);
+
+  // -- Off-contract conflict detection (May 15 – Aug 15) --
+  const offContractConflicts = [];
+  if (isInOffContract(chairApprovalBy)) {
+    offContractConflicts.push({
+      milestone: "Chair approval of complete draft",
+      date: chairApprovalBy
+    });
+  }
+  if (isInOffContract(committeeDistBy)) {
+    offContractConflicts.push({
+      milestone: "Distribute manuscript to committee",
+      date: committeeDistBy
+    });
+  }
+  if (isInOffContract(effectiveNotifDeadline)) {
+    offContractConflicts.push({
+      milestone: "Submit NOTIF",
+      date: effectiveNotifDeadline
+    });
+  }
+  if (isInOffContract(planningDefense)) {
+    offContractConflicts.push({
+      milestone: "Defense itself",
+      date: planningDefense
+    });
+  }
+
+  // Gate evaluations
+  const gates = [];
+
+  // ===== ELIGIBILITY =====
+  // Residency
+  if (input.residency === "yes") {
+    gates.push({ category: "Eligibility to defend",
+      name: "Two semesters of post-qualifying residency complete", status: "ok" });
+  } else if (input.residency === "unsure") {
+    gates.push({ category: "Eligibility to defend",
+      name: "Post-qualifying residency status unclear",
+      status: "warn",
+      detail: "Confirm with the Grad School how many semesters of 767 you have completed post-qualifying." });
+  } else {
+    gates.push({ category: "Eligibility to defend",
+      name: "Post-qualifying residency not complete", status: "miss",
+      detail: "Two semesters of 767 after the qualifying exam are required before you can sit for the defense. This blocks all defense terms until completed." });
+  }
+
+  // Academic-year enrollment
+  if (term.type !== "summer") {
+    if (input.enrollment === "yes") {
+      gates.push({ category: "Eligibility to defend",
+        name: `${term.label} 767 (or 2hr post-residency) enrollment confirmed`, status: "ok" });
+    } else if (input.enrollment === "unsure") {
+      gates.push({ category: "Eligibility to defend",
+        name: `${term.label} 767 enrollment unconfirmed`,
+        status: "warn",
+        detail: "Academic-year defenses require enrollment in 767 (or 2hr post-residency). Confirm before planning further." });
+    } else {
+      gates.push({ category: "Eligibility to defend",
+        name: `${term.label} 767 enrollment missing`,
+        status: "miss",
+        detail: "Per Graduate School policy, you cannot defend during the academic year without enrollment in 767 or 2hr post-residency for that term." });
+    }
+  } else {
+    gates.push({ category: "Eligibility to defend",
+      name: "Summer enrollment — exempt", status: "ok",
+      detail: "You do not need to enroll in 767 over the summer to defend, provided you are scheduled to defend by the summer exam deadline and have already banked your two semesters of post-qualifying residency." });
+  }
+
+  // ===== NOTIF READINESS — can you fill it out? =====
+  // Chair draft
+  if (input.chairDraft === "yes") {
+    gates.push({ category: "NOTIF readiness (can you file it?)",
+      name: "Chair has reviewed and approved a complete draft", status: "ok" });
+  } else {
+    gates.push({ category: "NOTIF readiness (can you file it?)",
+      name: "Chair has not yet approved a complete draft", status: "miss",
+      detail: "NOTIF should not be filed until your chair has reviewed and approved a complete draft for distribution to the rest of the committee. \"Sent but not reviewed\" doesn't satisfy this." });
+  }
+
+  // Committee review
+  if (input.committee === "all") {
+    gates.push({ category: "NOTIF readiness (can you file it?)",
+      name: "All committee members have reviewed at least some part", status: "ok" });
+  } else if (input.committee === "some") {
+    gates.push({ category: "NOTIF readiness (can you file it?)",
+      name: "Not all committee members have reviewed",
+      status: "miss",
+      detail: "Get something substantive to the remaining committee members. The EDL Dissertation Defense page asks for every committee member to have reviewed at least some part before NOTIF — and you verify this on the form itself." });
+  } else if (input.committee === "chair") {
+    gates.push({ category: "NOTIF readiness (can you file it?)",
+      name: "Only chair has reviewed; other members have not",
+      status: "miss",
+      detail: "The EDL Dissertation Defense page asks for every committee member — not just the chair — to have reviewed at least some part of the dissertation before NOTIF. Distribute writing to all members." });
+  } else {
+    gates.push({ category: "NOTIF readiness (can you file it?)",
+      name: "Committee has not reviewed anything substantive",
+      status: "miss",
+      detail: "No committee member has seen substantive writing. This blocks NOTIF and therefore blocks scheduling the defense." });
+  }
+
+  // ===== NOTIF TIMING — when must it be filed? =====
+  const daysUntilNotif = daysBetween(today, effectiveNotifDeadline);
+  const eightWeekExplain = "The Graduate School needs 8 weeks to audit your file and identify an outside examiner (typically 4–5 weeks of that). Do not finalize a defense date with your committee before the outside examiner has been assigned.";
+
+  const bindExplanation = calendarBinds
+    ? `Calendar deadline (${prettyDate(calendarNotifDeadline)}) is earlier than the 8-weeks-before-defense date (${prettyDate(eightWeeksBeforePlanning)}), so the Graduate School's published deadline is the binding one.`
+    : `Eight-weeks-before-defense (${prettyDate(eightWeeksBeforePlanning)}) is earlier than the Graduate School's published calendar deadline (${prettyDate(calendarNotifDeadline)}). The 8-week rule binds, not the calendar date — this is the trap that catches students who plan against the calendar number.`;
+
+  if (daysUntilNotif < 0) {
+    gates.push({ category: "NOTIF timing (when must it be filed?)",
+      name: `NOTIF deadline has passed (${prettyDate(effectiveNotifDeadline)})`,
+      status: "miss",
+      detail: `${bindExplanation} ${eightWeekExplain} This term is no longer reachable via NOTIF.` });
+  } else if (daysUntilNotif < 14) {
+    gates.push({ category: "NOTIF timing (when must it be filed?)",
+      name: `NOTIF deadline: ${prettyDate(effectiveNotifDeadline)} — ${daysUntilNotif} day${daysUntilNotif===1?"":"s"} away`,
+      status: "warn",
+      detail: `${bindExplanation} ${eightWeekExplain} Tight window — NOTIF readiness items must already be in place.` });
+  } else {
+    gates.push({ category: "NOTIF timing (when must it be filed?)",
+      name: `NOTIF deadline: ${prettyDate(effectiveNotifDeadline)} — ${daysUntilNotif} days away`,
+      status: "ok",
+      detail: `${bindExplanation} ${eightWeekExplain} Plan against this operational date as your real deadline.` });
+  }
+
+  // Revision buffer gate — surfaces the cost of defending at term-end
+  if (!recommendedReachable) {
+    gates.push({ category: "NOTIF timing (when must it be filed?)",
+      name: "Revision buffer compressed",
+      status: "warn",
+      detail: `The recommended defense date (${prettyDate(recommendedDefense)}) — which would give you the full 60-day revision window the Graduate School permits — is already in the past for this term. If you press ahead with this term, you'll have substantially less time for revisions between defense and the final ETD deadline (${prettyDate(term.finalETDDeadline)}). Higher risk to dissertation quality and to you.` });
+  }
+
+  // ===== DEFENSE READINESS — will you be defensible by exam day? =====
+  const daysToDefense = daysBetween(today, term.examSitDeadline);
+  const progressKey = input.program === "phd" ? input.progressPhd : input.progressEdd;
+  const draftRank = PROGRESS_RANK[progressKey];
+
+  // Program-specific labels reflecting where the student says they are
+  const progressLabels = input.program === "phd" ? {
+    "ready":      { name: "Defense-ready / near-final draft of the whole dissertation",      ok: true },
+    "drafted":    { name: "Ch. 4 and 5 drafted; revisions and integration still ongoing",   tight: true },
+    "writing":    { name: "Data collected; Ch. 4 and 5 still in active writing",            warn: true },
+    "collecting": { name: "Still collecting or analyzing data",                              hard: true },
+    "early":      { name: "Earlier than data collection (proposal stage or before)",         hard: true }
+  } : {
+    "ready":      { name: "Defense-ready / near-final draft of the whole dissertation",                                ok: true },
+    "drafted":    { name: "Results, monitoring, and conclusions drafted; revisions and integration still ongoing",     tight: true },
+    "writing":    { name: "Evaluation data analyzed; results / monitoring / conclusions still in active writing",      warn: true },
+    "collecting": { name: "Still collecting or analyzing evaluation-phase data",                                       hard: true },
+    "early":      { name: "Earlier than evaluation phase (reconnaissance or planning)",                                hard: true }
+  };
+  const pl = progressLabels[progressKey] || { name: progressKey, hard: true };
+
+  let draftGate;
+  if (draftRank >= 4) {
+    draftGate = { category: "Defense readiness (will you be ready by exam day?)",
+      name: pl.name, status: "ok" };
+  } else if (draftRank === 3) {
+    draftGate = { category: "Defense readiness (will you be ready by exam day?)",
+      name: pl.name,
+      status: daysToDefense > 70 ? "ok" : "warn",
+      detail: daysToDefense > 70
+        ? "Draft is well along with reasonable runway. Plan for committee feedback cycles before NOTIF."
+        : "Drafted but limited time. Committee feedback must be fast and focused — and your chair has to approve a complete version before NOTIF." };
+  } else if (draftRank === 2) {
+    draftGate = { category: "Defense readiness (will you be ready by exam day?)",
+      name: pl.name,
+      status: daysToDefense > 120 ? "warn" : "miss",
+      detail: "Active writing remains — typically 8–12+ weeks of work before a complete draft is in your chair's hands, let alone the committee's." };
+  } else if (draftRank === 1) {
+    draftGate = { category: "Defense readiness (will you be ready by exam day?)",
+      name: pl.name,
+      status: "miss",
+      detail: "Data is still in motion. Until data collection and analysis are complete, the chapters that go into a defendable dissertation can't be written. Unlikely to defend within this term's deadlines." };
+  } else {
+    draftGate = { category: "Defense readiness (will you be ready by exam day?)",
+      name: pl.name,
+      status: "miss",
+      detail: "The bulk of dissertation work is still ahead. The next concrete step is the work itself, not a procedural step. Not feasible to be defense-ready within this term's deadlines." };
+  }
+  gates.push(draftGate);
+
+  // Determine verdict
+  const misses = gates.filter(g => g.status === "miss").length;
+  const warns  = gates.filter(g => g.status === "warn").length;
+
+  let verdict, reason;
+  // Hard blockers first
+  if (input.residency === "no") {
+    verdict = "NO";
+    reason = "You cannot defend in any term until two semesters of post-qualifying residency are complete.";
+  } else if (term.type !== "summer" && input.enrollment === "no") {
+    verdict = "NO";
+    reason = `${term.label} requires 767 (or 2hr post-residency) enrollment. Without it, no defense in this term is permitted by the Graduate School.`;
+  } else if (daysUntilNotif < 0) {
+    verdict = "NO";
+    reason = `The effective NOTIF deadline for ${term.label} (${prettyDate(effectiveNotifDeadline)}) has already passed.`;
+  } else if (draftRank <= 1) {
+    verdict = "NOT YET";
+    reason = `Your work is not yet at the stage where ${term.label} is feasible. The fix is not procedural — it's the work itself.`;
+  } else if (misses >= 2) {
+    verdict = "NOT YET";
+    reason = `Multiple gates are not in place for ${term.label}. Plan toward a later term and use the time for the work, not the paperwork.`;
+  } else if (misses === 1) {
+    verdict = "NOT YET";
+    reason = `One blocking item stands between you and ${term.label}. Resolve it or target a later term.`;
+  } else if (warns >= 2) {
+    verdict = "TIGHT";
+    reason = `${term.label} is procedurally reachable, but several items need to align quickly. The work behind those items is yours to do.`;
+  } else if (warns === 1) {
+    verdict = "TIGHT";
+    reason = `${term.label} is reachable, but one item needs attention soon.`;
+  } else {
+    verdict = "GO";
+    reason = `Your answers suggest ${term.label} is procedurally reachable. The work itself still has to happen — committee feedback, your time at the keyboard, the dissertation defending itself in the room.`;
+  }
+
+  // Build timeline
+  const timelineEvents = [
+    { date: term.sessionBegins, name: "Session begins", desc: term.label + " begins.", critical: false }
+  ];
+
+  // Chair approval milestone
+  timelineEvents.push({
+    date: chairApprovalBy,
+    name: "Chair approval of complete draft — target",
+    desc: "~10 weeks before defense. Chair should have reviewed and approved the complete draft for distribution to the rest of the committee.",
+    critical: false
+  });
+
+  // Committee distribution milestone
+  timelineEvents.push({
+    date: committeeDistBy,
+    name: "Distribute manuscript to full committee — target",
+    desc: "~8 weeks before defense. Committee members need substantial time to read and provide feedback. They should not be reading for the first time in the two weeks before the defense.",
+    critical: false
+  });
+
+  // NOTIF deadline row(s)
+  if (effectiveNotifDeadline === calendarNotifDeadline) {
+    timelineEvents.push({
+      date: effectiveNotifDeadline,
+      name: "NOTIF deadline",
+      desc: "Submit Notification of Intent. The Grad School calendar deadline and the 8-week-prior date coincide here.",
+      critical: true
+    });
+  } else {
+    timelineEvents.push({
+      date: effectiveNotifDeadline,
+      name: "NOTIF — effective deadline",
+      desc: `${calendarBinds ? "Grad School calendar deadline" : "8 weeks before defense"} — this is the operational date. Submit by here.`,
+      critical: true
+    });
+    timelineEvents.push({
+      date: calendarBinds ? eightWeeksBeforePlanning : calendarNotifDeadline,
+      name: calendarBinds ? "8-weeks-before-defense date (informational)" : "NOTIF — Grad School calendar deadline (informational)",
+      desc: calendarBinds
+        ? "Eight weeks before defense. The calendar deadline above is earlier and binds."
+        : "The Grad School's published calendar deadline. The 8-week rule above is earlier and binds — do not plan around this date.",
+      critical: false
+    });
+  }
+
+  timelineEvents.push(
+    { date: term.degreeApplicationDeadline, name: "Degree application deadline",
+      desc: `Apply for the ${term.degreeLabel} in myUK by this date.`, critical: false },
+    { date: term.examScheduleDeadline, name: "Last day to schedule final exam",
+      desc: "The defense must be scheduled by this date for this term.", critical: false }
+  );
+
+  // Recommended defense date row (if it's still in the future)
+  if (recommendedReachable) {
+    timelineEvents.push({
+      date: recommendedDefense,
+      name: "Defense — recommended date",
+      desc: `60 days before final ETD. Defending here uses the full revision window the Graduate School permits.`,
+      critical: true,
+      badge: "recommended"
+    });
+  }
+
+  // Latest allowable defense (the exam-sit deadline) — always shown, distinguished as backstop
+  timelineEvents.push({
+    date: term.examSitDeadline,
+    name: recommendedReachable ? "Defense — latest allowable (not advised)" : "Defense — exam-sit deadline",
+    desc: recommendedReachable
+      ? `The term's absolute cutoff for defending. Leaves only ${daysBetween(latestDefense, term.finalETDDeadline)} days for revisions before final ETD — high-risk; the recommended date above gives you the full revision window.`
+      : `The recommended date has passed for this term. This is now the only remaining date by which you can sit for the exam — and revisions must be completed in roughly ${daysBetween(latestDefense, term.finalETDDeadline)} days.`,
+    critical: !recommendedReachable,
+    badge: "latest"
+  });
+
+  timelineEvents.push(
+    { date: term.formatReviewDeadline, name: "ETD format review deadline",
+      desc: "Submit dissertation to the Graduate School via UKnowledge for format review.", critical: false },
+    { date: term.finalETDDeadline, name: "Final ETD acceptance deadline",
+      desc: "Final revised ETD must be accepted by the Graduate School for the degree to confer.", critical: true }
+  );
+  timelineEvents.sort((a,b) => a.date.localeCompare(b.date));
+
+  // Next-term suggestion
+  let nextTermSuggestion = null;
+  if (verdict !== "GO") {
+    const currentIndex = TERM_ORDER.indexOf(term.key);
+    if (currentIndex >= 0 && currentIndex < TERM_ORDER.length - 1) {
+      const nextKey = TERM_ORDER[currentIndex + 1];
+      nextTermSuggestion = TERMS[nextKey];
+    }
+  }
+
+  // ===== Next actions — the concrete to-do list =====
+  const nextActions = [];
+
+  // 1. The work itself — comes first when not done
+  if (draftRank <= 1) {
+    const workAction = input.program === "phd"
+      ? (draftRank === 0
+          ? "Get through proposal and IRB; begin data collection."
+          : "Complete data collection and analysis.")
+      : (draftRank === 0
+          ? "Complete reconnaissance and planning; design and submit the evaluation-phase intervention for IRB."
+          : "Complete evaluation-phase data collection and analysis.");
+    nextActions.push({
+      deadline: null,
+      action: "Do the work that's actually outstanding.",
+      note: workAction + " No procedural step changes this — the dissertation has to be written. This is the long-pole item."
+    });
+  } else if (draftRank === 2) {
+    nextActions.push({
+      deadline: null,
+      action: "Finish active writing of remaining chapters.",
+      note: input.program === "phd"
+        ? "Complete drafts of Ch. 4 and 5 (and any remaining chapters)."
+        : "Complete drafts of results, monitoring, and conclusions."
+    });
+  }
+
+  // 2. Get chair full draft and approval
+  if (input.chairDraft !== "yes") {
+    nextActions.push({
+      deadline: chairApprovalBy,
+      action: "Submit a complete draft to your chair for review and approval.",
+      note: "Your chair needs to read and approve a complete draft before NOTIF can be filed. \"Sent but not reviewed\" doesn't count."
+    });
+  }
+
+  // 3. Distribute to committee
+  if (input.committee !== "all") {
+    nextActions.push({
+      deadline: committeeDistBy,
+      action: "Distribute the chair-approved manuscript to every committee member.",
+      note: "All committee members must have had the chance to review at least some part of the dissertation before NOTIF — you verify this on the NOTIF form."
+    });
+  }
+
+  // 4. NOTIF
+  if (daysUntilNotif >= 0) {
+    nextActions.push({
+      deadline: effectiveNotifDeadline,
+      action: "Submit the Notification of Intent (NOTIF) to the Graduate School.",
+      note: "The Grad School needs 8 weeks from NOTIF to identify and confirm an outside examiner. Do not finalize a defense date with your committee until the outside examiner has been assigned."
+    });
+  }
+
+  // 5. Degree application
+  if (term.degreeApplicationDeadline > today) {
+    nextActions.push({
+      deadline: term.degreeApplicationDeadline,
+      action: `Apply for the ${term.degreeLabel} in myUK.`,
+      note: "Separate step from NOTIF — easy to miss."
+    });
+  }
+
+  // 6. Schedule defense — date is ~2 weeks before defense, not the term's backstop
+  if (term.examScheduleDeadline > today) {
+    const scheduleBy = subDays(planningDefense, 14);
+    const scheduleAction = scheduleBy > today ? scheduleBy : term.examScheduleDeadline;
+    nextActions.push({
+      deadline: scheduleAction,
+      action: "Schedule the final examination with your committee.",
+      note: `After NOTIF is in and the outside examiner is confirmed by the Grad School. Term backstop for scheduling: ${prettyDate(term.examScheduleDeadline)}.`
+    });
+  }
+
+  // 7. Defense day
+  nextActions.push({
+    deadline: planningDefense,
+    action: "Defend.",
+    note: recommendedReachable
+      ? "Defending here gives you the full revision window the Graduate School permits before final ETD."
+      : `Latest allowable date for ${term.label}. Compressed revision window — high-risk.`
+  });
+
+  // 8. ETD
+  nextActions.push({
+    deadline: term.finalETDDeadline,
+    action: "Submit final, revised ETD to the Graduate School via UKnowledge.",
+    note: `Format review by ${prettyDate(term.formatReviewDeadline)}, final acceptance by ${prettyDate(term.finalETDDeadline)}.`
+  });
+
+  // Sort: no-deadline items first (they're the long-pole work items), then chronological
+  nextActions.sort((a, b) => {
+    if (!a.deadline && !b.deadline) return 0;
+    if (!a.deadline) return -1;
+    if (!b.deadline) return 1;
+    return a.deadline.localeCompare(b.deadline);
+  });
+
+  // ===== Term comparison data =====
+  let termComparison = null;
+  if (nextTermSuggestion) {
+    const nt = nextTermSuggestion;
+    const ntRec = subDays(nt.finalETDDeadline, REVISION_BUFFER_DAYS);
+    const ntEightWk = subDays(nt.examSitDeadline, NOTIF_LEAD_DAYS);
+    const ntNotif = ntEightWk < nt.notifDeadline ? ntEightWk : nt.notifDeadline;
+    const ntChairBy = subDays(ntRec >= today ? ntRec : nt.examSitDeadline, CHAIR_LEAD_DAYS);
+    const ntDistBy = subDays(ntRec >= today ? ntRec : nt.examSitDeadline, DIST_LEAD_DAYS);
+    termComparison = {
+      thisTerm: {
+        label: term.label,
+        notif: effectiveNotifDeadline,
+        chairBy: chairApprovalBy,
+        distBy: committeeDistBy,
+        defense: planningDefense,
+        finalETD: term.finalETDDeadline,
+        latest: term.examSitDeadline
+      },
+      nextTerm: {
+        label: nt.label,
+        notif: ntNotif,
+        chairBy: ntChairBy,
+        distBy: ntDistBy,
+        defense: ntRec >= today ? ntRec : nt.examSitDeadline,
+        finalETD: nt.finalETDDeadline,
+        latest: nt.examSitDeadline
+      }
+    };
+  }
+
+  return {
+    input,
+    term,
+    today,
+    effectiveNotifDeadline,
+    daysUntilNotif,
+    daysToDefense,
+    recommendedDefense,
+    latestDefense,
+    recommendedReachable,
+    chairApprovalBy,
+    committeeDistBy,
+    offContractConflicts,
+    gates,
+    verdict,
+    reason,
+    timelineEvents,
+    nextTermSuggestion,
+    nextActions,
+    termComparison
+  };
+}
+
+/* ----- ASAP resolver ----- */
+function pickAsapTerm(today) {
+  for (const key of TERM_ORDER) {
+    const t = TERMS[key];
+    const eightWeeksBeforeExam = isoDate(addDays(parseDate(t.examSitDeadline), -56));
+    const effNotif = eightWeeksBeforeExam < t.notifDeadline ? eightWeeksBeforeExam : t.notifDeadline;
+    if (effNotif >= today) return key;
+  }
+  return TERM_ORDER[TERM_ORDER.length - 1];
+}
+
+/* ----- Form wiring ----- */
+const form = document.getElementById("form");
+const todayInput = document.getElementById("today");
+const termInput = document.getElementById("term");
+const enrollmentField = document.getElementById("enrollmentField");
+const progressPhdField = document.getElementById("progressPhdField");
+const progressEddField = document.getElementById("progressEddField");
+const checkBtn = document.getElementById("checkBtn");
+const resetBtn = document.getElementById("resetBtn");
+const results = document.getElementById("results");
+const copyReportBtn = document.getElementById("copyReportBtn");
+const shareLinkBtn = document.getElementById("shareLinkBtn");
+const copyFeedback = document.getElementById("copyFeedback");
+
+// Hold last result for copy
+let lastResult = null;
+
+// init today
+function initToday() {
+  const d = new Date();
+  todayInput.value = isoDate(d);
+}
+initToday();
+
+// Conditional show of enrollment question
+function refreshEnrollmentField() {
+  const targetKey = termInput.value === "asap"
+    ? pickAsapTerm(todayInput.value)
+    : termInput.value;
+  const t = TERMS[targetKey];
+  if (!t) { enrollmentField.hidden = true; return; }
+  enrollmentField.hidden = (t.type === "summer");
+}
+termInput.addEventListener("change", refreshEnrollmentField);
+todayInput.addEventListener("change", refreshEnrollmentField);
+refreshEnrollmentField();
+
+// Conditional show of program-specific progress question
+function refreshProgressFields() {
+  const program = getRadioValue("program");
+  progressPhdField.hidden = (program !== "phd");
+  progressEddField.hidden = (program !== "edd");
+}
+// Initial state (both hidden until program is selected)
+progressPhdField.hidden = true;
+progressEddField.hidden = true;
+
+// Visual highlight for selected radio
+form.querySelectorAll(".radio-group").forEach(group => {
+  group.addEventListener("change", e => {
+    if (e.target.type !== "radio") return;
+    group.querySelectorAll("label").forEach(l => l.classList.remove("checked"));
+    e.target.closest("label").classList.add("checked");
+    if (e.target.name === "program") refreshProgressFields();
+  });
+});
+
+function getRadioValue(name) {
+  const sel = form.querySelector(`input[name="${name}"]:checked`);
+  return sel ? sel.value : null;
+}
+
+/* ----- Render ----- */
+function renderVerdict(result) {
+  const cls = result.verdict.toLowerCase().replace(" ", "-");
+  return `
+    <div class="verdict ${cls}">
+      <div class="label">Verdict for ${result.term.label}</div>
+      <div class="value">${result.verdict}</div>
+      <p class="reason">${result.reason}</p>
+      <span class="footnote">This is a procedural read of your timeline. The work itself — writing, analysis, committee feedback — happens between you and your committee.</span>
+    </div>
+  `;
+}
+
+function renderNextActions(result) {
+  if (!result.nextActions || result.nextActions.length === 0) return null;
+  const items = result.nextActions.map(a => {
+    const dl = a.deadline
+      ? `<span class="action-deadline">By ${prettyDate(a.deadline)}</span>`
+      : `<span class="action-deadline">No fixed date — your long-pole item</span>`;
+    const note = a.note ? `<span class="action-note">${a.note}</span>` : "";
+    return `<li>${dl}<strong>${a.action}</strong>${note}</li>`;
+  }).join("");
+  return `<ol>${items}</ol>`;
+}
+
+function renderTermComparison(result) {
+  if (!result.termComparison) return null;
+  const { thisTerm, nextTerm } = result.termComparison;
+  const rows = [
+    ["Recommended defense", thisTerm.defense, nextTerm.defense, "60 days before final ETD"],
+    ["NOTIF deadline", thisTerm.notif, nextTerm.notif, "8 weeks before recommended defense (or calendar deadline, whichever is earlier)"],
+    ["Chair approval of complete draft", thisTerm.chairBy, nextTerm.chairBy, "~10 weeks before defense"],
+    ["Distribute to full committee", thisTerm.distBy, nextTerm.distBy, "~8 weeks before defense"],
+    ["Latest allowable defense", thisTerm.latest, nextTerm.latest, "Term-end backstop, not advised"],
+    ["Final ETD acceptance", thisTerm.finalETD, nextTerm.finalETD, "Degree confers only after this"]
+  ];
+  const rowHtml = rows.map(([label, a, b, note]) => `
+    <tr>
+      <td>${label}<span class="compare-note">${note}</span></td>
+      <td class="compare-dates">${prettyDate(a)}</td>
+      <td class="compare-dates">${prettyDate(b)}</td>
+    </tr>
+  `).join("");
+  return `
+    <p class="term-compare-message">Delaying a term doesn't reduce the work — it shifts <em>when</em> the work has to land. Side by side:</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Milestone</th>
+          <th>${thisTerm.label}</th>
+          <th>${nextTerm.label}</th>
+        </tr>
+      </thead>
+      <tbody>${rowHtml}</tbody>
+    </table>
+  `;
+}
+
+function renderTimeline(result) {
+  const todayStr = result.today;
+  const items = result.timelineEvents.map(ev => {
+    const past = ev.date < todayStr;
+    const classes = [];
+    if (past) classes.push("past");
+    if (ev.critical) classes.push("critical");
+    if (ev.badge === "recommended") classes.push("recommended");
+    let badge = "";
+    if (ev.badge === "recommended") badge = '<span class="badge">Recommended</span>';
+    else if (ev.badge === "latest") badge = '<span class="badge latest">Backstop</span>';
+    return `
+      <li class="${classes.join(" ")}">
+        <span class="date">${prettyDate(ev.date)}</span>
+        <span class="event">${ev.name}${badge}<span class="desc">${ev.desc}</span></span>
+      </li>
+    `;
+  }).join("");
+  return `<ol>${items}</ol>`;
+}
+
+function renderOffContract(result) {
+  if (!result.offContractConflicts || result.offContractConflicts.length === 0) return null;
+
+  const items = result.offContractConflicts
+    .map(c => `<li><strong>${c.milestone}</strong> — ${prettyDate(c.date)}</li>`).join("");
+
+  // Choose wording based on whether the defense itself falls in the window
+  const defenseInWindow = result.offContractConflicts.some(c => c.milestone === "Defense itself");
+  const guidance = defenseInWindow
+    ? "If your chair isn't available off-contract, push your defense to fall or later."
+    : "If your chair isn't available off-contract, either pull these milestones earlier (so they finish before May 15), or push your defense to a later term.";
+
+  return `
+    <p><strong>This plan puts one or more milestones in the standard summer off-contract window (May 15 – Aug 15).</strong> Faculty are typically off-contract during this period and may not be available for review, approvals, or signatures.</p>
+    <ul>${items}</ul>
+    <p style="margin:0.6rem 0 0;">${guidance} Confirm with your chair directly before committing to this plan.</p>
+  `;
+}
+
+function renderChecklist(result) {
+  const categoryOrder = [
+    "Eligibility to defend",
+    "NOTIF readiness (can you file it?)",
+    "NOTIF timing (when must it be filed?)",
+    "Defense readiness (will you be ready by exam day?)"
+  ];
+  const groups = {};
+  result.gates.forEach(g => {
+    const cat = g.category || "Other";
+    if (!groups[cat]) groups[cat] = [];
+    groups[cat].push(g);
+  });
+
+  let html = "<ul>";
+  categoryOrder.forEach(cat => {
+    if (!groups[cat] || groups[cat].length === 0) return;
+    html += `<li class="cat-heading"><span class="cat-label">${cat}</span></li>`;
+    groups[cat].forEach(g => {
+      const cls = g.status; // ok | warn | miss
+      const mark = g.status === "ok" ? "✓" : g.status === "warn" ? "!" : "✗";
+      const detail = g.detail ? `<span class="detail">${g.detail}</span>` : "";
+      html += `<li class="${cls}"><span class="mark">${mark}</span><span>${g.name}${detail}</span></li>`;
+    });
+  });
+  html += "</ul>";
+  return html;
+}
+
+function renderNextTerm(result) {
+  if (!result.nextTermSuggestion) return "";
+  const t = result.nextTermSuggestion;
+  const eightWeeksBeforeExam = isoDate(addDays(parseDate(t.examSitDeadline), -56));
+  const effNotif = eightWeeksBeforeExam < t.notifDeadline ? eightWeeksBeforeExam : t.notifDeadline;
+  const rec = subDays(t.finalETDDeadline, REVISION_BUFFER_DAYS);
+  return `
+    <h3 style="margin-top:0">Consider ${t.label} (${t.degreeLabel})</h3>
+    <p>Recommended defense: <strong>${prettyDate(rec)}</strong>. Latest allowable: <strong>${prettyDate(t.examSitDeadline)}</strong>. Effective NOTIF deadline: <strong>${prettyDate(effNotif)}</strong>. Final ETD: <strong>${prettyDate(t.finalETDDeadline)}</strong>.</p>
+    <p style="margin-top:0.5rem">Use the additional time to finish drafting, get committee distribution done, and confirm enrollment if academic-year.</p>
+  `;
+}
+
+/* ----- Plain-text report builder (for clipboard / email) ----- */
+function buildTextReport(result) {
+  const programLabel = result.input.program === "phd" ? "PhD" : "EdD";
+  const today = prettyDate(result.today);
+  const term = result.term;
+
+  const lines = [];
+  lines.push("DEFENSE READINESS CHECK");
+  lines.push("Generated " + today);
+  lines.push("");
+  lines.push("Program:      " + programLabel);
+  lines.push("Target term:  " + term.label + " (" + term.degreeLabel + ")");
+  lines.push("");
+  lines.push("VERDICT: " + result.verdict);
+  lines.push(result.reason);
+  lines.push("");
+  lines.push("(This is a procedural read of the timeline. The work itself — writing, analysis,");
+  lines.push("committee feedback — happens between the student and the committee.)");
+  lines.push("");
+
+  // Key dates
+  lines.push("KEY DATES");
+  lines.push("- Recommended defense:   " + prettyDate(result.recommendedDefense)
+    + (result.recommendedReachable ? "" : "  (already past — collapsed onto latest)"));
+  lines.push("- Latest allowable:      " + prettyDate(result.latestDefense));
+  lines.push("- Effective NOTIF:       " + prettyDate(result.effectiveNotifDeadline)
+    + "  (" + result.daysUntilNotif + " day" + (result.daysUntilNotif === 1 ? "" : "s") + " from " + today + ")");
+  lines.push("- Calendar NOTIF (GS):   " + prettyDate(term.notifDeadline));
+  lines.push("- Chair approval by:     " + prettyDate(result.chairApprovalBy));
+  lines.push("- Distribute to cttee:   " + prettyDate(result.committeeDistBy));
+  lines.push("- Last day to schedule:  " + prettyDate(term.examScheduleDeadline));
+  lines.push("- Format review by:      " + prettyDate(term.formatReviewDeadline));
+  lines.push("- Final ETD by:          " + prettyDate(term.finalETDDeadline));
+  lines.push("");
+
+  // Off-contract warning
+  if (result.offContractConflicts && result.offContractConflicts.length > 0) {
+    lines.push("SUMMER OFF-CONTRACT CONFLICT");
+    lines.push("The following milestones land in the May 15 - Aug 15 chair off-contract window:");
+    result.offContractConflicts.forEach(c => {
+      lines.push("  - " + c.milestone + " (" + prettyDate(c.date) + ")");
+    });
+    lines.push("");
+  }
+
+  // Next actions
+  if (result.nextActions && result.nextActions.length > 0) {
+    lines.push("WHAT TO DO, IN ORDER");
+    result.nextActions.forEach((a, i) => {
+      const dl = a.deadline ? "By " + prettyDate(a.deadline) : "No fixed date — long-pole item";
+      lines.push("  " + (i + 1) + ". " + a.action);
+      lines.push("     " + dl);
+      if (a.note) {
+        lines.push(wrapText(a.note, 72, "     "));
+      }
+    });
+    lines.push("");
+  }
+
+  // Outstanding items, grouped
+  lines.push("OUTSTANDING ITEMS");
+  const categoryOrder = [
+    "Eligibility to defend",
+    "NOTIF readiness (can you file it?)",
+    "NOTIF timing (when must it be filed?)",
+    "Defense readiness (will you be ready by exam day?)"
+  ];
+  const groups = {};
+  result.gates.forEach(g => {
+    const c = g.category || "Other";
+    if (!groups[c]) groups[c] = [];
+    groups[c].push(g);
+  });
+  categoryOrder.forEach(cat => {
+    if (!groups[cat]) return;
+    lines.push("");
+    lines.push("  " + cat.toUpperCase());
+    groups[cat].forEach(g => {
+      const mark = g.status === "ok" ? "[OK]" : g.status === "warn" ? "[!]" : "[X]";
+      lines.push("    " + mark + " " + g.name);
+      if (g.detail) {
+        lines.push(wrapText(g.detail, 76, "        "));
+      }
+    });
+  });
+  lines.push("");
+
+  // Term comparison
+  if (result.termComparison) {
+    const { thisTerm, nextTerm } = result.termComparison;
+    lines.push("THIS TERM vs NEXT TERM");
+    lines.push("Delaying doesn't reduce the work — it shifts when each milestone has to land.");
+    lines.push("");
+    lines.push("  Milestone                       " + padRight(thisTerm.label, 14) + "  " + nextTerm.label);
+    lines.push("  " + "-".repeat(30) + "  " + "-".repeat(14) + "  " + "-".repeat(14));
+    const rows = [
+      ["Recommended defense", thisTerm.defense, nextTerm.defense],
+      ["NOTIF deadline", thisTerm.notif, nextTerm.notif],
+      ["Chair approval by", thisTerm.chairBy, nextTerm.chairBy],
+      ["Distribute to committee", thisTerm.distBy, nextTerm.distBy],
+      ["Latest allowable", thisTerm.latest, nextTerm.latest],
+      ["Final ETD", thisTerm.finalETD, nextTerm.finalETD]
+    ];
+    rows.forEach(([label, a, b]) => {
+      lines.push("  " + padRight(label, 30) + "  " + padRight(prettyDate(a), 14) + "  " + prettyDate(b));
+    });
+    lines.push("");
+  }
+
+  // Next term
+  if (result.nextTermSuggestion) {
+    const t = result.nextTermSuggestion;
+    const rec = subDays(t.finalETDDeadline, REVISION_BUFFER_DAYS);
+    const eightWk = subDays(t.examSitDeadline, NOTIF_LEAD_DAYS);
+    const effN = eightWk < t.notifDeadline ? eightWk : t.notifDeadline;
+    lines.push("IF THIS TERM DOESN'T WORK");
+    lines.push("Consider " + t.label + " (" + t.degreeLabel + ").");
+    lines.push("  Recommended defense: " + prettyDate(rec));
+    lines.push("  Latest allowable:    " + prettyDate(t.examSitDeadline));
+    lines.push("  Effective NOTIF:     " + prettyDate(effN));
+    lines.push("  Final ETD:           " + prettyDate(t.finalETDDeadline));
+    lines.push("");
+  }
+
+  lines.push("---");
+  lines.push("Generated by the Defense Readiness Check (UK EdD/PhD).");
+  lines.push("Planning aid only — verify all dates and rules with the Graduate School and your DGS.");
+
+  return lines.join("\n");
+}
+
+function padRight(s, n) {
+  if (s.length >= n) return s;
+  return s + " ".repeat(n - s.length);
+}
+
+function wrapText(text, width, indent) {
+  const words = text.split(/\s+/);
+  const lines = [];
+  let line = indent;
+  words.forEach(w => {
+    if ((line + w).length > width && line.trim().length > 0) {
+      lines.push(line);
+      line = indent + w + " ";
+    } else {
+      line += w + " ";
+    }
+  });
+  if (line.trim().length > 0) lines.push(line.trimEnd());
+  return lines.join("\n");
+}
+
+function doCheck() {
+  const targetRaw = termInput.value;
+  const todayVal = todayInput.value;
+  const target = targetRaw === "asap" ? pickAsapTerm(todayVal) : targetRaw;
+
+  const input = {
+    target,
+    today: todayVal,
+    program: getRadioValue("program"),
+    progressPhd: getRadioValue("progressPhd"),
+    progressEdd: getRadioValue("progressEdd"),
+    residency: getRadioValue("residency"),
+    chairDraft: getRadioValue("chairDraft"),
+    committee: getRadioValue("committee"),
+    enrollment: getRadioValue("enrollment")
+  };
+
+  // Light validation
+  const missing = [];
+  if (!input.program) missing.push("program (PhD or EdD)");
+  if (input.program === "phd" && !input.progressPhd) missing.push("where the PhD work is");
+  if (input.program === "edd" && !input.progressEdd) missing.push("where the EdD work is");
+  if (!input.residency) missing.push("residency status");
+  if (!input.chairDraft) missing.push("chair draft status");
+  if (!input.committee) missing.push("committee review status");
+  if (TERMS[target].type !== "summer" && !input.enrollment) missing.push("767 enrollment status");
+  if (missing.length) {
+    results.hidden = false;
+    document.getElementById("verdictBox").innerHTML = `
+      <div class="verdict no">
+        <div class="label">Need a little more info</div>
+        <div class="value">Incomplete</div>
+        <p class="reason">Please answer: ${missing.join(", ")}.</p>
+      </div>`;
+    document.getElementById("timeline").innerHTML = "";
+    document.getElementById("checklist").innerHTML = "";
+    document.getElementById("nextTermSection").hidden = true;
+    document.getElementById("offContractSection").hidden = true;
+    document.getElementById("nextActionsSection").hidden = true;
+    document.getElementById("termCompareSection").hidden = true;
+    lastResult = null;
+    results.scrollIntoView({behavior: "smooth", block: "start"});
+    return;
+  }
+
+  const result = evaluate(input);
+  lastResult = result;
+  document.getElementById("verdictBox").innerHTML = renderVerdict(result);
+  document.getElementById("timeline").innerHTML = renderTimeline(result);
+  document.getElementById("checklist").innerHTML = renderChecklist(result);
+
+  const ocHtml = renderOffContract(result);
+  if (ocHtml) {
+    document.getElementById("offContractWarning").innerHTML = ocHtml;
+    document.getElementById("offContractSection").hidden = false;
+  } else {
+    document.getElementById("offContractSection").hidden = true;
+  }
+
+  const naHtml = renderNextActions(result);
+  if (naHtml) {
+    document.getElementById("nextActions").innerHTML = naHtml;
+    document.getElementById("nextActionsSection").hidden = false;
+  } else {
+    document.getElementById("nextActionsSection").hidden = true;
+  }
+
+  const tcHtml = renderTermComparison(result);
+  if (tcHtml) {
+    document.getElementById("termCompare").innerHTML = tcHtml;
+    document.getElementById("termCompareSection").hidden = false;
+  } else {
+    document.getElementById("termCompareSection").hidden = true;
+  }
+
+  const nt = renderNextTerm(result);
+  document.getElementById("nextTerm").innerHTML = nt;
+  document.getElementById("nextTermSection").hidden = !nt;
+
+  results.hidden = false;
+  results.scrollIntoView({behavior: "smooth", block: "start"});
+}
+
+checkBtn.addEventListener("click", doCheck);
+resetBtn.addEventListener("click", () => {
+  form.reset();
+  initToday();
+  form.querySelectorAll(".radio-group label").forEach(l => l.classList.remove("checked"));
+  refreshEnrollmentField();
+  refreshProgressFields();
+  progressPhdField.hidden = true;
+  progressEddField.hidden = true;
+  lastResult = null;
+  results.hidden = true;
+});
+
+// Copy report handler
+copyReportBtn.addEventListener("click", async () => {
+  if (!lastResult) {
+    copyFeedback.textContent = "Run a check first.";
+    copyFeedback.classList.add("visible");
+    setTimeout(() => copyFeedback.classList.remove("visible"), 2500);
+    return;
+  }
+  const text = buildTextReport(lastResult);
+  await copyToClipboard(text, "Report copied.");
+});
+
+// Share link handler
+shareLinkBtn.addEventListener("click", async () => {
+  const url = buildShareUrl();
+  await copyToClipboard(url, "Link copied — paste into an email or save as a bookmark.");
+});
+
+// Reusable copy helper with graceful fallback
+async function copyToClipboard(text, successMsg) {
+  try {
+    await navigator.clipboard.writeText(text);
+    copyFeedback.textContent = successMsg;
+    copyFeedback.classList.add("visible");
+    setTimeout(() => copyFeedback.classList.remove("visible"), 3000);
+  } catch (e) {
+    // Fallback: hidden textarea + execCommand
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.left = "-9999px";
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand("copy");
+      copyFeedback.textContent = successMsg;
+    } catch (e2) {
+      copyFeedback.textContent = "Couldn't copy automatically. A prompt will open — press Ctrl/Cmd+C.";
+      window.prompt("Copy this (press Ctrl/Cmd+C):", text);
+    }
+    document.body.removeChild(ta);
+    copyFeedback.classList.add("visible");
+    setTimeout(() => copyFeedback.classList.remove("visible"), 3000);
+  }
+}
+
+// ===== Shareable URL state =====
+const SHAREABLE_FIELDS = [
+  "term", "today",
+  "program", "progressPhd", "progressEdd",
+  "residency", "chairDraft", "committee", "enrollment"
+];
+
+function currentFormState() {
+  return {
+    term: termInput.value,
+    today: todayInput.value,
+    program: getRadioValue("program"),
+    progressPhd: getRadioValue("progressPhd"),
+    progressEdd: getRadioValue("progressEdd"),
+    residency: getRadioValue("residency"),
+    chairDraft: getRadioValue("chairDraft"),
+    committee: getRadioValue("committee"),
+    enrollment: getRadioValue("enrollment")
+  };
+}
+
+function buildShareUrl() {
+  const state = currentFormState();
+  const params = new URLSearchParams();
+  SHAREABLE_FIELDS.forEach(k => {
+    const v = state[k];
+    if (v) params.append(k, v);
+  });
+  const base = window.location.origin + window.location.pathname;
+  const qs = params.toString();
+  return qs ? base + "#" + qs : base;
+}
+
+function readUrlState() {
+  const hash = window.location.hash;
+  if (!hash || hash.length < 2) return null;
+  const params = new URLSearchParams(hash.slice(1));
+  const state = {};
+  for (const [k, v] of params) state[k] = v;
+  return Object.keys(state).length > 0 ? state : null;
+}
+
+function applyUrlState(state) {
+  if (!state) return false;
+  if (state.term) termInput.value = state.term;
+  if (state.today) todayInput.value = state.today;
+  const radioFields = ["program", "progressPhd", "progressEdd", "residency", "chairDraft", "committee", "enrollment"];
+  radioFields.forEach(name => {
+    const value = state[name];
+    if (!value) return;
+    const radio = form.querySelector(`input[name="${name}"][value="${value}"]`);
+    if (radio) {
+      radio.checked = true;
+      const label = radio.closest("label");
+      if (label) label.classList.add("checked");
+    }
+  });
+  refreshProgressFields();
+  refreshEnrollmentField();
+  return true;
+}
+
+// On load: if URL has state, restore it and run a check automatically
+(function initFromUrl() {
+  const state = readUrlState();
+  if (!state) return;
+  const restored = applyUrlState(state);
+  if (!restored) return;
+  // Run check after a short delay so the DOM has updated visually
+  setTimeout(() => {
+    doCheck();
+  }, 60);
+})();
+</script>
+
+</body>
+</html>
