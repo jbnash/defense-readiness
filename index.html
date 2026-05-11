@@ -4,6 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Defense Readiness Check — UK EdD / PhD</title>
+  <meta name="description" content="Plan a UK EdD/PhD dissertation defense against the Graduate School calendar, the NOTIF eight-week rule, and 767 enrollment. Tells you whether your target term is realistic.">
+  <meta property="og:title" content="Defense Readiness Check — UK EdD / PhD">
+  <meta property="og:description" content="A planning tool that runs your situation against the Graduate School calendar, the NOTIF eight-week rule, and the 767 enrollment requirement, and tells you whether the term you want is realistic.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jbnash.github.io/defense-readiness/">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='10' fill='%230033A0'/><text x='32' y='44' font-family='Georgia,serif' font-size='34' font-weight='700' text-anchor='middle' fill='%23C1A875'>DR</text></svg>">
   <style>
     /* ===== UK Brand-aligned tokens ===== */
     :root {
@@ -132,6 +139,29 @@
       .intro-grid { grid-template-columns: 1fr; gap: 0.9rem; }
     }
 
+    /* Stale data banner */
+    .stale-banner {
+      background: #fff7e6;
+      border: 1px solid var(--no);
+      border-left: 4px solid var(--no);
+      padding: 0.9rem 1.2rem;
+      border-radius: var(--radius);
+      margin-bottom: 1.25rem;
+      color: var(--dark-gray);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    .stale-banner strong { color: var(--no); }
+    .stale-banner[hidden] { display: none; }
+
+    /* Fieldset reset for radio groups using <fieldset><legend> */
+    .radio-fieldset {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      min-width: 0;
+    }
+
     /* Resources block (footer) */
     .resources {
       background: var(--white);
@@ -198,12 +228,14 @@
 
     .field { margin-bottom: 1.35rem; }
     .field:last-child { margin-bottom: 0.5rem; }
-    .field label.q {
+    .field label.q,
+    .field legend.q {
       display: block;
       font-weight: 600;
       font-size: 1rem;
       color: var(--dark-gray);
       margin-bottom: 0.45rem;
+      padding: 0;
     }
     .field .hint {
       font-size: 0.85rem;
@@ -299,6 +331,7 @@
       cursor: pointer;
     }
     button.secondary:hover { background: var(--uk-blue-soft); }
+    button.secondary:focus { outline: 3px solid var(--steel-blue); outline-offset: 2px; }
 
     /* ===== Results ===== */
     #results { margin-top: 2rem; }
@@ -644,6 +677,10 @@
 
 <main>
 
+  <div class="stale-banner" id="staleBanner" hidden>
+    <strong>This tool's calendar data ends August 2027.</strong> The hard-coded term deadlines no longer cover today's date. Verify all dates directly with the UK Graduate School and your DGS before acting.
+  </div>
+
   <div class="intro">
     <div class="intro-grid">
       <div>
@@ -665,12 +702,14 @@
     <p class="section-title">Tell us where you are</p>
 
     <div class="field">
-      <label class="q">Which doctoral program are you in?</label>
-      <div class="hint">Determines which pre-defense prerequisites apply.</div>
-      <div class="radio-group" data-name="program">
-        <label><input type="radio" name="program" value="phd"> PhD</label>
-        <label><input type="radio" name="program" value="edd"> EdD</label>
-      </div>
+      <fieldset class="radio-fieldset">
+        <legend class="q">Which doctoral program are you in?</legend>
+        <div class="hint">Determines which pre-defense prerequisites apply.</div>
+        <div class="radio-group">
+          <label><input type="radio" name="program" value="phd"> PhD</label>
+          <label><input type="radio" name="program" value="edd"> EdD</label>
+        </div>
+      </fieldset>
     </div>
 
     <div class="field">
@@ -692,67 +731,79 @@
     </div>
 
     <div class="field conditional" id="progressPhdField">
-      <label class="q">Where is your dissertation work — concretely?</label>
-      <div class="hint">PhD progress check. Be honest — the verdict below is only as accurate as this answer.</div>
-      <div class="radio-group" data-name="progressPhd">
-        <label><input type="radio" name="progressPhd" value="ready"> Defense-ready or near-final draft of the whole dissertation</label>
-        <label><input type="radio" name="progressPhd" value="drafted"> Data collected and Ch. 4 and 5 drafted; revisions and integration ongoing</label>
-        <label><input type="radio" name="progressPhd" value="writing"> Data collected; Ch. 4 and 5 still in active writing</label>
-        <label><input type="radio" name="progressPhd" value="collecting"> Still collecting or analyzing data</label>
-        <label><input type="radio" name="progressPhd" value="early"> Earlier than that (proposal stage or before)</label>
-      </div>
+      <fieldset class="radio-fieldset">
+        <legend class="q">Where is your dissertation work — concretely?</legend>
+        <div class="hint">PhD progress check. Be honest — the verdict below is only as accurate as this answer.</div>
+        <div class="radio-group">
+          <label><input type="radio" name="progressPhd" value="ready"> Defense-ready or near-final draft of the whole dissertation</label>
+          <label><input type="radio" name="progressPhd" value="drafted"> Data collected and Ch. 4 and 5 drafted; revisions and integration ongoing</label>
+          <label><input type="radio" name="progressPhd" value="writing"> Data collected; Ch. 4 and 5 still in active writing</label>
+          <label><input type="radio" name="progressPhd" value="collecting"> Still collecting or analyzing data</label>
+          <label><input type="radio" name="progressPhd" value="early"> Earlier than that (proposal stage or before)</label>
+        </div>
+      </fieldset>
     </div>
 
     <div class="field conditional" id="progressEddField">
-      <label class="q">Where is your dissertation work — concretely?</label>
-      <div class="hint">EdD progress check. Be honest — the verdict below is only as accurate as this answer.</div>
-      <div class="radio-group" data-name="progressEdd">
-        <label><input type="radio" name="progressEdd" value="ready"> Defense-ready or near-final draft of the whole dissertation</label>
-        <label><input type="radio" name="progressEdd" value="drafted"> Evaluation data analyzed; results, monitoring, and conclusions drafted; revisions and integration ongoing</label>
-        <label><input type="radio" name="progressEdd" value="writing"> Evaluation data analyzed; results / monitoring / conclusions still in active writing</label>
-        <label><input type="radio" name="progressEdd" value="collecting"> Still collecting or analyzing evaluation-phase data</label>
-        <label><input type="radio" name="progressEdd" value="early"> Earlier than that (reconnaissance or planning phase)</label>
-      </div>
+      <fieldset class="radio-fieldset">
+        <legend class="q">Where is your dissertation work — concretely?</legend>
+        <div class="hint">EdD progress check. Be honest — the verdict below is only as accurate as this answer.</div>
+        <div class="radio-group">
+          <label><input type="radio" name="progressEdd" value="ready"> Defense-ready or near-final draft of the whole dissertation</label>
+          <label><input type="radio" name="progressEdd" value="drafted"> Evaluation data analyzed; results, monitoring, and conclusions drafted; revisions and integration ongoing</label>
+          <label><input type="radio" name="progressEdd" value="writing"> Evaluation data analyzed; results / monitoring / conclusions still in active writing</label>
+          <label><input type="radio" name="progressEdd" value="collecting"> Still collecting or analyzing evaluation-phase data</label>
+          <label><input type="radio" name="progressEdd" value="early"> Earlier than that (reconnaissance or planning phase)</label>
+        </div>
+      </fieldset>
     </div>
 
     <div class="field">
-      <label class="q">Have you completed two semesters of post-qualifying residency (767)?</label>
-      <div class="hint">You must complete two semesters of 767 after passing your qualifying exam before you can sit for the final defense.</div>
-      <div class="radio-group" data-name="residency">
-        <label><input type="radio" name="residency" value="yes"> Yes, two or more</label>
-        <label><input type="radio" name="residency" value="no"> No, fewer than two</label>
-        <label><input type="radio" name="residency" value="unsure"> Not sure</label>
-      </div>
+      <fieldset class="radio-fieldset">
+        <legend class="q">Have you completed two semesters of post-qualifying residency (767)?</legend>
+        <div class="hint">You must complete two semesters of 767 after passing your qualifying exam before you can sit for the final defense.</div>
+        <div class="radio-group">
+          <label><input type="radio" name="residency" value="yes"> Yes, two or more</label>
+          <label><input type="radio" name="residency" value="no"> No, fewer than two</label>
+          <label><input type="radio" name="residency" value="unsure"> Not sure</label>
+        </div>
+      </fieldset>
     </div>
 
     <div class="field">
-      <label class="q">Is a complete draft of the dissertation in your committee chair's hands — and has your chair reviewed and approved it for distribution?</label>
-      <div class="hint">The formal NOTIF rule: chair must have a complete draft that they have reviewed and approved before NOTIF can be filed. "Sent but not reviewed" does not count.</div>
-      <div class="radio-group" data-name="chairDraft">
-        <label><input type="radio" name="chairDraft" value="yes"> Yes — chair has reviewed and approved</label>
-        <label><input type="radio" name="chairDraft" value="no"> Not yet</label>
-      </div>
+      <fieldset class="radio-fieldset">
+        <legend class="q">Is a complete draft of the dissertation in your committee chair's hands — and has your chair reviewed and approved it for distribution?</legend>
+        <div class="hint">The formal NOTIF rule: chair must have a complete draft that they have reviewed and approved before NOTIF can be filed. "Sent but not reviewed" does not count.</div>
+        <div class="radio-group">
+          <label><input type="radio" name="chairDraft" value="yes"> Yes — chair has reviewed and approved</label>
+          <label><input type="radio" name="chairDraft" value="no"> Not yet</label>
+        </div>
+      </fieldset>
     </div>
 
     <div class="field">
-      <label class="q">Have all your committee members had the chance to review at least some part of your dissertation?</label>
-      <div class="hint">The EDL Dissertation Defense page asks the student to have every committee member review at least some part before NOTIF — and you verify this on the form itself.</div>
-      <div class="radio-group" data-name="committee">
-        <label><input type="radio" name="committee" value="none"> No one has seen anything substantive</label>
-        <label><input type="radio" name="committee" value="chair"> Only my chair</label>
-        <label><input type="radio" name="committee" value="some"> Some members, not all</label>
-        <label><input type="radio" name="committee" value="all"> All members</label>
-      </div>
+      <fieldset class="radio-fieldset">
+        <legend class="q">Have all your committee members had the chance to review at least some part of your dissertation?</legend>
+        <div class="hint">The EDL Dissertation Defense page asks the student to have every committee member review at least some part before NOTIF — and you verify this on the form itself.</div>
+        <div class="radio-group">
+          <label><input type="radio" name="committee" value="none"> No one has seen anything substantive</label>
+          <label><input type="radio" name="committee" value="chair"> Only my chair</label>
+          <label><input type="radio" name="committee" value="some"> Some members, not all</label>
+          <label><input type="radio" name="committee" value="all"> All members</label>
+        </div>
+      </fieldset>
     </div>
 
     <div class="field conditional" id="enrollmentField">
-      <label class="q">For your target term, will you be enrolled in 767 (or 2hr post-residency)?</label>
-      <div class="hint">During the academic year (fall and spring), Graduate School policy is clear: you cannot defend without 767 (or 2hr post-residency) enrollment in that term. Summer is exempt if you are scheduled to defend.</div>
-      <div class="radio-group" data-name="enrollment">
-        <label><input type="radio" name="enrollment" value="yes"> Yes, enrollment is confirmed</label>
-        <label><input type="radio" name="enrollment" value="no"> No, I won't be enrolled</label>
-        <label><input type="radio" name="enrollment" value="unsure"> Not sure yet</label>
-      </div>
+      <fieldset class="radio-fieldset">
+        <legend class="q">For your target term, will you be enrolled in 767 (or 2hr post-residency)?</legend>
+        <div class="hint">During the academic year (fall and spring), Graduate School policy is clear: you cannot defend without 767 (or 2hr post-residency) enrollment in that term. Summer is exempt if you are scheduled to defend.</div>
+        <div class="radio-group">
+          <label><input type="radio" name="enrollment" value="yes"> Yes, enrollment is confirmed</label>
+          <label><input type="radio" name="enrollment" value="no"> No, I won't be enrolled</label>
+          <label><input type="radio" name="enrollment" value="unsure"> Not sure yet</label>
+        </div>
+      </fieldset>
     </div>
 
     <div class="actions">
@@ -1459,6 +1510,18 @@ function initToday() {
 }
 initToday();
 
+// Staleness check: the hard-coded TERMS table ends with summer-2027.
+// If today is past that term's final ETD deadline, every verdict will be "NO"
+// without explanation — show a banner instead of silently failing.
+(function checkCalendarStale() {
+  const lastTerm = TERMS[TERM_ORDER[TERM_ORDER.length - 1]];
+  const todayStr = isoDate(new Date());
+  if (todayStr > lastTerm.finalETDDeadline) {
+    const banner = document.getElementById("staleBanner");
+    if (banner) banner.hidden = false;
+  }
+})();
+
 // Conditional show of enrollment question
 function refreshEnrollmentField() {
   const targetKey = termInput.value === "asap"
@@ -1883,6 +1946,8 @@ resetBtn.addEventListener("click", () => {
   progressEddField.hidden = true;
   lastResult = null;
   results.hidden = true;
+  // Clear any restored-from-link state so a refresh starts clean.
+  history.replaceState(null, "", window.location.pathname);
 });
 
 // Copy report handler
