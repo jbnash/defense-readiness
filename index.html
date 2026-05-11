@@ -827,7 +827,7 @@
       <div class="off-contract-warning" id="offContractWarning"></div>
     </div>
     <div class="result-section" id="nextActionsSection" hidden>
-      <h3>What you need to do, in order</h3>
+      <h3 id="nextActionsHeading">What you'd need to do, in order, to defend</h3>
       <div class="next-actions" id="nextActions"></div>
     </div>
     <div class="result-section">
@@ -1924,6 +1924,11 @@ function doCheck() {
   const naHtml = renderNextActions(result);
   if (naHtml) {
     document.getElementById("nextActions").innerHTML = naHtml;
+    const termPhrase = targetRaw === "asap"
+      ? "as soon as possible"
+      : "in " + result.term.label;
+    document.getElementById("nextActionsHeading").textContent =
+      "What you'd need to do, in order, to defend " + termPhrase;
     document.getElementById("nextActionsSection").hidden = false;
   } else {
     document.getElementById("nextActionsSection").hidden = true;
