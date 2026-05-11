@@ -348,16 +348,10 @@
       text-transform: uppercase;
       letter-spacing: 0.18em;
       font-size: 0.78rem;
-      opacity: 0.85;
-      margin-bottom: 0.15rem;
-    }
-    .verdict .term-name {
-      font-family: var(--display);
       font-weight: 700;
-      font-size: 1.55rem;
-      line-height: 1.15;
-      padding-bottom: 0.5rem;
-      margin-bottom: 0.7rem;
+      opacity: 1;
+      padding-bottom: 0.55rem;
+      margin-bottom: 0.6rem;
       border-bottom: 2px solid rgba(255,255,255,0.4);
       display: inline-block;
     }
@@ -1583,8 +1577,7 @@ function renderVerdict(result) {
   const cls = result.verdict.toLowerCase().replace(" ", "-");
   return `
     <div class="verdict ${cls}">
-      <div class="label">Verdict for</div>
-      <div class="term-name">${result.term.label}</div>
+      <div class="label">Verdict for ${result.term.label}</div>
       <div class="value">${result.verdict}</div>
       <p class="reason">${result.reason}</p>
       <span class="footnote">This is a procedural read of your timeline. The work itself — writing, analysis, committee feedback — happens between you and your committee.</span>
