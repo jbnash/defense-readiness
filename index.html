@@ -485,6 +485,22 @@
     .next-term h3 { color: var(--uk-blue-deep); }
     .next-term p { margin: 0.25rem 0 0; font-size: 0.96rem; }
 
+    /* Summer caveat — nested inside .next-term when the suggestion is summer */
+    .summer-caveat-inline {
+      margin-top: 0.9rem;
+      background: #fff7e6;
+      border: 1px solid var(--uk-gold);
+      border-left: 4px solid var(--uk-gold);
+      border-radius: var(--radius-lg);
+      padding: 0.9rem 1.15rem;
+      font-size: 0.94rem;
+      color: var(--dark-gray);
+    }
+    .summer-caveat-inline p { margin: 0.55rem 0; }
+    .summer-caveat-inline p:first-child { margin-top: 0; }
+    .summer-caveat-inline p:last-child  { margin-bottom: 0; }
+    .summer-caveat-inline strong { color: var(--uk-blue-deep); }
+
     /* Off-contract warning */
     .off-contract-warning {
       background: #fff7e6;
@@ -874,7 +890,7 @@
     <p class="resources-note">This tool is a personal planning sketch on top of those canonical sources, not a substitute for them. The DGS office, manual, SharePoint, and registrar's calendar are where the authoritative answers live.</p>
   </div>
   <p><strong>Sources.</strong> University of Kentucky Office of the Registrar academic calendars (Summer 2026 – Summer 2027). UK Graduate School Doctoral Checklist. EDL Doctoral Students SharePoint &mdash; The Dissertation Defense page. Verify all dates and rules with the Graduate School and your DGS before acting.</p>
-  <p style="margin-top:0.5rem;">v6 &middot; built for EDL doctoral advising &middot; not an official Graduate School product.</p>
+  <p style="margin-top:0.5rem;">v7 &middot; built for EDL doctoral advising &middot; not an official Graduate School product.</p>
 </footer>
 
 <script>
@@ -1706,10 +1722,20 @@ function renderNextTerm(result) {
   const eightWeeksBeforeExam = isoDate(addDays(parseDate(t.examSitDeadline), -56));
   const effNotif = eightWeeksBeforeExam < t.notifDeadline ? eightWeeksBeforeExam : t.notifDeadline;
   const rec = subDays(t.finalETDDeadline, REVISION_BUFFER_DAYS);
+
+  const tail = t.type === "summer"
+    ? `
+      <div class="summer-caveat-inline">
+        <p><strong>Summer is a special case — not a default alternative.</strong> The entire summer term (May 15 – August 15) falls in the standard faculty off-contract window. Defenses scheduled here happen during a period when your chair and committee are typically not contracted to work.</p>
+        <p>Some students and faculty arrange a defense in the late-April / early-May inter-term gap that counts toward an August degree, or negotiate explicit off-contract availability for a true summer defense. This varies by faculty — <strong>talk with your chair</strong> before treating summer as a viable next term.</p>
+      </div>
+    `
+    : `<p style="margin-top:0.5rem">Use the additional time to finish drafting and get committee distribution done. ${t.label} is during the academic year, so you'll need to be enrolled in 767 (or 2hr post-residency) for that term — defenses during fall and spring require active enrollment.</p>`;
+
   return `
     <h3 style="margin-top:0">Consider ${t.label} (${t.degreeLabel})</h3>
     <p>Recommended defense: <strong>${prettyDate(rec)}</strong>. Latest allowable: <strong>${prettyDate(t.examSitDeadline)}</strong>. Effective NOTIF deadline: <strong>${prettyDate(effNotif)}</strong>. Final ETD: <strong>${prettyDate(t.finalETDDeadline)}</strong>.</p>
-    <p style="margin-top:0.5rem">Use the additional time to finish drafting, get committee distribution done, and confirm enrollment if academic-year.</p>
+    ${tail}
   `;
 }
 
@@ -1835,6 +1861,20 @@ function buildTextReport(result) {
     lines.push("  Latest allowable:    " + prettyDate(t.examSitDeadline));
     lines.push("  Effective NOTIF:     " + prettyDate(effN));
     lines.push("  Final ETD:           " + prettyDate(t.finalETDDeadline));
+    lines.push("");
+    if (t.type === "summer") {
+      lines.push(wrapText(
+        "Summer is a special case — not a default alternative. The entire summer term (May 15 – August 15) falls in the standard faculty off-contract window. Defenses scheduled here happen during a period when your chair and committee are typically not contracted to work.",
+        72, "  "));
+      lines.push("");
+      lines.push(wrapText(
+        "Some students and faculty arrange a defense in the late-April / early-May inter-term gap that counts toward an August degree, or negotiate explicit off-contract availability for a true summer defense. This varies by faculty — talk with your chair before treating summer as a viable next term.",
+        72, "  "));
+    } else {
+      lines.push(wrapText(
+        "Use the additional time to finish drafting and get committee distribution done. " + t.label + " is during the academic year, so you'll need to be enrolled in 767 (or 2hr post-residency) for that term — defenses during fall and spring require active enrollment.",
+        72, "  "));
+    }
     lines.push("");
   }
 
@@ -2029,6 +2069,14 @@ function buildHtmlReport(result) {
     html += `<tr><td style="${tdLabel}">Effective NOTIF</td><td style="${tdDate}">${esc(prettyDate(effN))}</td></tr>`;
     html += `<tr><td style="${tdLabel}">Final ETD</td><td style="${tdDate}">${esc(prettyDate(t.finalETDDeadline))}</td></tr>`;
     html += `</table>`;
+    if (t.type === "summer") {
+      html += `<div style="margin-top: 12px; background: #fff7e6; border: 1px solid #C1A875; border-left: 4px solid #C1A875; border-radius: 6px; padding: 10px 14px; font-size: 13px; color: #231F20;">`;
+      html += `<p style="margin: 0 0 8px;"><strong style="color: #00226b;">Summer is a special case — not a default alternative.</strong> The entire summer term (May 15 – August 15) falls in the standard faculty off-contract window. Defenses scheduled here happen during a period when your chair and committee are typically not contracted to work.</p>`;
+      html += `<p style="margin: 0;">Some students and faculty arrange a defense in the late-April / early-May inter-term gap that counts toward an August degree, or negotiate explicit off-contract availability for a true summer defense. This varies by faculty — <strong style="color: #00226b;">talk with your chair</strong> before treating summer as a viable next term.</p>`;
+      html += `</div>`;
+    } else {
+      html += `<p style="margin: 12px 0 0; font-size: 13px;">Use the additional time to finish drafting and get committee distribution done. ${esc(t.label)} is during the academic year, so you'll need to be enrolled in 767 (or 2hr post-residency) for that term — defenses during fall and spring require active enrollment.</p>`;
+    }
     html += `</div>`;
   }
 
