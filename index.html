@@ -1850,6 +1850,199 @@ function padRight(s, n) {
   return s + " ".repeat(n - s.length);
 }
 
+/* ----- HTML report builder (for rich-text clipboard) ----- */
+function buildHtmlReport(result) {
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const programLabel = result.input.program === "phd" ? "PhD" : "EdD";
+  const today = prettyDate(result.today);
+  const term = result.term;
+
+  const verdictColors = {
+    "GO":      "#1f7a3a",
+    "TIGHT":   "#b07f12",
+    "NOT YET": "#b25a06",
+    "NO":      "#a31a1a"
+  };
+  const verdictBg = verdictColors[result.verdict] || "#0033A0";
+
+  const SANS = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif";
+  const SERIF = "Georgia, 'Times New Roman', serif";
+  const MONO = "SFMono-Regular, Menlo, Consolas, monospace";
+
+  const wrap = `font-family: ${SANS}; color: #231F20; line-height: 1.5; max-width: 640px; font-size: 14px;`;
+  const eyebrow = `text-transform: uppercase; letter-spacing: 0.12em; font-size: 12px; font-weight: 700; color: #0033A0; margin: 22px 0 10px;`;
+  const tdLabel = `padding: 4px 12px 4px 0; color: #6D6E71; font-size: 13px; vertical-align: top;`;
+  const tdDate  = `padding: 4px 0; font-weight: 600; font-family: ${MONO}; font-size: 13px; color: #0033A0; vertical-align: top;`;
+
+  let html = `<div style="${wrap}">`;
+
+  // Header
+  html += `
+    <div style="border-bottom: 3px solid #C1A875; padding-bottom: 10px; margin-bottom: 16px;">
+      <div style="font-family: ${SERIF}; color: #0033A0; font-size: 22px; font-weight: 700; line-height: 1.1;">Defense Readiness Check</div>
+      <div style="color: #6D6E71; font-size: 13px; margin-top: 3px;">Generated ${esc(today)}</div>
+    </div>
+  `;
+
+  // Program / target term
+  html += `
+    <table style="border-collapse: collapse; margin-bottom: 6px;">
+      <tr><td style="${tdLabel}">Program</td><td style="padding: 4px 0; font-weight: 600;">${esc(programLabel)}</td></tr>
+      <tr><td style="${tdLabel}">Target term</td><td style="padding: 4px 0; font-weight: 600;">${esc(term.label)} <span style="color: #6D6E71; font-weight: 400; font-size: 13px;">(${esc(term.degreeLabel)})</span></td></tr>
+    </table>
+  `;
+
+  // Verdict box
+  html += `
+    <div style="background: ${verdictBg}; color: #ffffff; padding: 16px 20px; border-radius: 6px; margin: 16px 0 4px;">
+      <div style="text-transform: uppercase; letter-spacing: 0.14em; font-size: 13px; font-weight: 700; margin: 0 0 10px; padding-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.4); display: inline-block;">Verdict for ${esc(term.label)}</div>
+      <div style="font-family: ${SERIF}; font-size: 32px; font-weight: 700; margin: 0 0 8px; line-height: 1.05;">${esc(result.verdict)}</div>
+      <div style="font-size: 14px;">${esc(result.reason)}</div>
+      <div style="font-size: 12px; opacity: 0.9; margin-top: 10px; font-style: italic;">A procedural read of your timeline. The work itself — writing, analysis, committee feedback — happens between you and your committee.</div>
+    </div>
+  `;
+
+  // Key dates
+  const keyRows = [
+    ["Recommended defense", prettyDate(result.recommendedDefense) + (result.recommendedReachable ? "" : " (past — collapsed onto latest)")],
+    ["Latest allowable", prettyDate(result.latestDefense)],
+    ["Effective NOTIF", prettyDate(result.effectiveNotifDeadline) + " (" + result.daysUntilNotif + " day" + (result.daysUntilNotif === 1 ? "" : "s") + ")"],
+    ["Calendar NOTIF (GS)", prettyDate(term.notifDeadline)],
+    ["Chair approval by", prettyDate(result.chairApprovalBy)],
+    ["Distribute to committee", prettyDate(result.committeeDistBy)],
+    ["Last day to schedule", prettyDate(term.examScheduleDeadline)],
+    ["Format review by", prettyDate(term.formatReviewDeadline)],
+    ["Final ETD by", prettyDate(term.finalETDDeadline)]
+  ];
+  html += `<div style="${eyebrow}">Key Dates</div><table style="border-collapse: collapse;">`;
+  keyRows.forEach(([label, val]) => {
+    html += `<tr><td style="${tdLabel}">${esc(label)}</td><td style="${tdDate}">${esc(val)}</td></tr>`;
+  });
+  html += `</table>`;
+
+  // Off-contract conflicts
+  if (result.offContractConflicts && result.offContractConflicts.length > 0) {
+    html += `<div style="background: #fff7e6; border: 1px solid #C1A875; border-left: 4px solid #C1A875; padding: 12px 16px; border-radius: 4px; margin: 20px 0;">`;
+    html += `<div style="font-weight: 700; color: #00226b; margin-bottom: 6px;">Summer off-contract conflict</div>`;
+    html += `<div style="font-size: 13px;">These milestones land in the May 15 – Aug 15 chair off-contract window:</div>`;
+    html += `<ul style="margin: 6px 0 0; padding-left: 22px; font-size: 13px;">`;
+    result.offContractConflicts.forEach(c => {
+      html += `<li><strong>${esc(c.milestone)}</strong> — ${esc(prettyDate(c.date))}</li>`;
+    });
+    html += `</ul></div>`;
+  }
+
+  // Next actions
+  if (result.nextActions && result.nextActions.length > 0) {
+    html += `<div style="${eyebrow}">What you'd need to do, in order, to defend in ${esc(term.label)}</div>`;
+    html += `<ol style="padding-left: 22px; margin: 0;">`;
+    result.nextActions.forEach(a => {
+      const dl = a.deadline ? "By " + prettyDate(a.deadline) : "No fixed date — long-pole item";
+      html += `<li style="margin-bottom: 12px;">`;
+      html += `<div style="font-family: ${MONO}; color: #0033A0; font-weight: 600; font-size: 12px; margin-bottom: 2px;">${esc(dl)}</div>`;
+      html += `<strong>${esc(a.action)}</strong>`;
+      if (a.note) {
+        html += `<div style="color: #6D6E71; font-size: 13px; margin-top: 2px;">${esc(a.note)}</div>`;
+      }
+      html += `</li>`;
+    });
+    html += `</ol>`;
+  }
+
+  // Outstanding items
+  const categoryOrder = [
+    "Eligibility to defend",
+    "NOTIF readiness (can you file it?)",
+    "NOTIF timing (when must it be filed?)",
+    "Defense readiness (will you be ready by exam day?)"
+  ];
+  const groups = {};
+  result.gates.forEach(g => {
+    const c = g.category || "Other";
+    if (!groups[c]) groups[c] = [];
+    groups[c].push(g);
+  });
+  html += `<div style="${eyebrow}">Outstanding Items</div>`;
+  categoryOrder.forEach(cat => {
+    if (!groups[cat]) return;
+    html += `<div style="font-weight: 700; font-size: 11px; color: #0033A0; border-bottom: 2px solid #0033A0; padding-bottom: 4px; margin: 14px 0 4px; text-transform: uppercase; letter-spacing: 0.12em;">${esc(cat)}</div>`;
+    html += `<ul style="list-style: none; padding: 0; margin: 0;">`;
+    groups[cat].forEach(g => {
+      const markColor = g.status === "ok" ? "#1f7a3a" : g.status === "warn" ? "#b07f12" : "#a31a1a";
+      const mark = g.status === "ok" ? "✓" : g.status === "warn" ? "!" : "✗";
+      html += `<li style="padding: 6px 0; border-bottom: 1px solid #F5F5F5;">`;
+      html += `<span style="color: ${markColor}; font-weight: 700; margin-right: 8px;">${mark}</span>`;
+      html += `<span>${esc(g.name)}</span>`;
+      if (g.detail) {
+        html += `<div style="color: #6D6E71; font-size: 13px; margin: 4px 0 0 22px;">${esc(g.detail)}</div>`;
+      }
+      html += `</li>`;
+    });
+    html += `</ul>`;
+  });
+
+  // Term comparison
+  if (result.termComparison) {
+    const tc = result.termComparison;
+    html += `<div style="${eyebrow}">This term vs the next</div>`;
+    html += `<div style="font-size: 13px; margin: 0 0 10px;">Delaying doesn't reduce the work — it shifts <em>when</em> the work has to land.</div>`;
+    html += `<table style="border-collapse: collapse; width: 100%; font-size: 13px;">`;
+    html += `<tr>`;
+    html += `<th style="text-align: left; padding: 6px 10px 6px 0; border-bottom: 2px solid #0033A0; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: #6D6E71;">Milestone</th>`;
+    html += `<th style="text-align: left; padding: 6px 10px; border-bottom: 2px solid #0033A0; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: #0033A0;">${esc(tc.thisTerm.label)}</th>`;
+    html += `<th style="text-align: left; padding: 6px 10px; border-bottom: 2px solid #0033A0; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: #0033A0;">${esc(tc.nextTerm.label)}</th>`;
+    html += `</tr>`;
+    const compareRows = [
+      ["Recommended defense", tc.thisTerm.recommended, tc.nextTerm.recommended],
+      ["NOTIF deadline", tc.thisTerm.notif, tc.nextTerm.notif],
+      ["Chair approval by", tc.thisTerm.chairBy, tc.nextTerm.chairBy],
+      ["Distribute to committee", tc.thisTerm.distBy, tc.nextTerm.distBy],
+      ["Latest allowable defense", tc.thisTerm.latest, tc.nextTerm.latest],
+      ["Final ETD acceptance", tc.thisTerm.finalETD, tc.nextTerm.finalETD]
+    ];
+    const fmtCell = d => d
+      ? `<span style="font-family: ${MONO}; color: #0033A0; font-weight: 600;">${esc(prettyDate(d))}</span>`
+      : `<span style="color: #6D6E71; font-style: italic; font-size: 12px;">Already past</span>`;
+    compareRows.forEach(([label, a, b]) => {
+      html += `<tr>`;
+      html += `<td style="padding: 6px 10px 6px 0; border-bottom: 1px solid #F5F5F5; font-weight: 600;">${esc(label)}</td>`;
+      html += `<td style="padding: 6px 10px; border-bottom: 1px solid #F5F5F5;">${fmtCell(a)}</td>`;
+      html += `<td style="padding: 6px 10px; border-bottom: 1px solid #F5F5F5;">${fmtCell(b)}</td>`;
+      html += `</tr>`;
+    });
+    html += `</table>`;
+  }
+
+  // Next term suggestion
+  if (result.nextTermSuggestion) {
+    const t = result.nextTermSuggestion;
+    const rec = subDays(t.finalETDDeadline, REVISION_BUFFER_DAYS);
+    const eightWk = subDays(t.examSitDeadline, NOTIF_LEAD_DAYS);
+    const effN = eightWk < t.notifDeadline ? eightWk : t.notifDeadline;
+    html += `<div style="${eyebrow}">If this term doesn't work</div>`;
+    html += `<div style="background: #e8eef9; border: 1px solid #4A90D9; border-radius: 6px; padding: 12px 16px;">`;
+    html += `<div style="font-weight: 700; color: #00226b; margin-bottom: 8px;">Consider ${esc(t.label)} (${esc(t.degreeLabel)})</div>`;
+    html += `<table style="border-collapse: collapse; font-size: 13px;">`;
+    html += `<tr><td style="${tdLabel}">Recommended defense</td><td style="${tdDate}">${esc(prettyDate(rec))}</td></tr>`;
+    html += `<tr><td style="${tdLabel}">Latest allowable</td><td style="${tdDate}">${esc(prettyDate(t.examSitDeadline))}</td></tr>`;
+    html += `<tr><td style="${tdLabel}">Effective NOTIF</td><td style="${tdDate}">${esc(prettyDate(effN))}</td></tr>`;
+    html += `<tr><td style="${tdLabel}">Final ETD</td><td style="${tdDate}">${esc(prettyDate(t.finalETDDeadline))}</td></tr>`;
+    html += `</table>`;
+    html += `</div>`;
+  }
+
+  // Footer
+  html += `
+    <div style="border-top: 1px solid #D1D3D4; margin-top: 24px; padding-top: 12px; font-size: 12px; color: #6D6E71;">
+      Generated by the Defense Readiness Check (UK EdD/PhD). Planning aid only — verify all dates and rules with the Graduate School and your DGS.
+    </div>
+  `;
+
+  html += `</div>`;
+  return html;
+}
+
 function wrapText(text, width, indent) {
   const words = text.split(/\s+/);
   const lines = [];
@@ -1978,8 +2171,32 @@ copyReportBtn.addEventListener("click", async () => {
     return;
   }
   const text = buildTextReport(lastResult);
-  await copyToClipboard(text, "Report copied.");
+  const html = buildHtmlReport(lastResult);
+  await copyRichReport(html, text, "Report copied — paste into an email for rich formatting.");
 });
+
+// Rich-format copy: writes both text/html and text/plain so email
+// clients and word processors get the styled version, while plain
+// text editors fall back to the ASCII layout.
+async function copyRichReport(html, text, successMsg) {
+  if (navigator.clipboard && typeof window.ClipboardItem === "function") {
+    try {
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          "text/html":  new Blob([html], { type: "text/html" }),
+          "text/plain": new Blob([text], { type: "text/plain" })
+        })
+      ]);
+      copyFeedback.textContent = successMsg;
+      copyFeedback.classList.add("visible");
+      setTimeout(() => copyFeedback.classList.remove("visible"), 3000);
+      return;
+    } catch (e) {
+      // Fall through to plain-text path
+    }
+  }
+  await copyToClipboard(text, "Report copied (plain text — your browser doesn't support rich-format clipboard).");
+}
 
 // Share link handler
 shareLinkBtn.addEventListener("click", async () => {
