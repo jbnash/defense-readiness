@@ -4,13 +4,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Defense Readiness Check — UK EdD / PhD</title>
-  <meta name="description" content="Plan a UK EdD/PhD dissertation defense against the Graduate School calendar, the NOTIF eight-week rule, and 767 enrollment. Tells you whether your target term is realistic.">
-  <meta property="og:title" content="Defense Readiness Check — UK EdD / PhD">
-  <meta property="og:description" content="A planning tool that runs your situation against the Graduate School calendar, the NOTIF eight-week rule, and the 767 enrollment requirement, and tells you whether the term you want is realistic.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://jbnash.github.io/defense-readiness/">
-  <meta name="twitter:card" content="summary">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='10' fill='%230033A0'/><text x='32' y='44' font-family='Georgia,serif' font-size='34' font-weight='700' text-anchor='middle' fill='%23C1A875'>DR</text></svg>">
   <style>
     /* ===== UK Brand-aligned tokens ===== */
     :root {
@@ -26,8 +19,9 @@
       --dark-gray:    #231F20;
       --go:           #1f7a3a;
       --tight:        #b07f12;
-      --not-yet:      #b25a06;
-      --no:           #a31a1a;
+      --not-yet:      #a8601f;
+      --not-this-term: #40566b;   /* calm slate — a scheduling fact, not a judgment */
+      --blocker:      #8c3b34;   /* muted clay for blocking items — firm, not alarming */
 
       --display: Georgia, "Times New Roman", serif;
       --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -139,29 +133,6 @@
       .intro-grid { grid-template-columns: 1fr; gap: 0.9rem; }
     }
 
-    /* Stale data banner */
-    .stale-banner {
-      background: #fff7e6;
-      border: 1px solid var(--no);
-      border-left: 4px solid var(--no);
-      padding: 0.9rem 1.2rem;
-      border-radius: var(--radius);
-      margin-bottom: 1.25rem;
-      color: var(--dark-gray);
-      font-size: 0.95rem;
-      line-height: 1.5;
-    }
-    .stale-banner strong { color: var(--no); }
-    .stale-banner[hidden] { display: none; }
-
-    /* Fieldset reset for radio groups using <fieldset><legend> */
-    .radio-fieldset {
-      margin: 0;
-      padding: 0;
-      border: 0;
-      min-width: 0;
-    }
-
     /* Resources block (footer) */
     .resources {
       background: var(--white);
@@ -228,14 +199,12 @@
 
     .field { margin-bottom: 1.35rem; }
     .field:last-child { margin-bottom: 0.5rem; }
-    .field label.q,
-    .field legend.q {
+    .field label.q {
       display: block;
       font-weight: 600;
       font-size: 1rem;
       color: var(--dark-gray);
       margin-bottom: 0.45rem;
-      padding: 0;
     }
     .field .hint {
       font-size: 0.85rem;
@@ -331,7 +300,6 @@
       cursor: pointer;
     }
     button.secondary:hover { background: var(--uk-blue-soft); }
-    button.secondary:focus { outline: 3px solid var(--steel-blue); outline-offset: 2px; }
 
     /* ===== Results ===== */
     #results { margin-top: 2rem; }
@@ -346,31 +314,38 @@
     .verdict .label {
       font-family: var(--sans);
       text-transform: uppercase;
-      letter-spacing: 0.14em;
-      font-size: 1rem;
+      letter-spacing: 0.2em;
+      font-size: 0.74rem;
+      opacity: 0.8;
+      margin-bottom: 0.5rem;
+    }
+    .verdict .term-name {
+      font-family: var(--display);
       font-weight: 700;
-      opacity: 1;
-      padding-bottom: 0.55rem;
-      margin-bottom: 0.65rem;
-      border-bottom: 2px solid rgba(255,255,255,0.4);
-      display: inline-block;
+      font-size: clamp(1.6rem, 4.5vw, 2.3rem);
+      line-height: 1.05;
+      color: var(--uk-gold);
+      margin-bottom: 0.15rem;
     }
     .verdict .value {
       font-family: var(--display);
       font-weight: 700;
-      font-size: 2.3rem;
-      line-height: 1.05;
-      margin-bottom: 0.5rem;
+      font-size: clamp(2.6rem, 8vw, 4.2rem);
+      line-height: 1;
+      letter-spacing: -0.015em;
+      margin: 0.1rem 0 0.85rem;
     }
     .verdict .reason {
-      font-size: 1.02rem;
+      font-size: 1.05rem;
+      line-height: 1.5;
       margin: 0;
-      max-width: 70ch;
+      max-width: 68ch;
     }
-    .verdict.go     { background: var(--go); }
-    .verdict.tight  { background: var(--tight); }
-    .verdict.not-yet { background: var(--not-yet); }
-    .verdict.no     { background: var(--no); }
+    .verdict.on-track       { background: var(--go); }
+    .verdict.tight          { background: var(--tight); }
+    .verdict.not-yet        { background: var(--not-yet); }
+    .verdict.not-this-term  { background: var(--not-this-term); }
+    .verdict.incomplete     { background: var(--med-gray); }
 
     .result-section { margin-top: 1.5rem; }
     .result-section h3 {
@@ -467,7 +442,7 @@
     }
     .checklist .ok    .mark { color: var(--go); }
     .checklist .warn  .mark { color: var(--tight); }
-    .checklist .miss  .mark { color: var(--no); }
+    .checklist .miss  .mark { color: var(--blocker); }
     .checklist .detail {
       display: block;
       color: var(--med-gray);
@@ -640,14 +615,6 @@
       color: var(--uk-blue);
       font-weight: 600;
     }
-    .term-compare .past-marker {
-      font-family: var(--sans);
-      font-weight: 500;
-      font-size: 0.82rem;
-      color: var(--med-gray);
-      font-style: italic;
-      letter-spacing: 0;
-    }
     .term-compare .compare-note {
       font-size: 0.83rem;
       color: var(--med-gray);
@@ -705,10 +672,6 @@
 
 <main>
 
-  <div class="stale-banner" id="staleBanner" hidden>
-    <strong>This tool's calendar data ends August 2027.</strong> The hard-coded term deadlines no longer cover today's date. Verify all dates directly with the UK Graduate School and your DGS before acting.
-  </div>
-
   <div class="intro">
     <div class="intro-grid">
       <div>
@@ -721,23 +684,24 @@
       </div>
     </div>
     <div class="intro-callout">
-      <strong>Faculty are typically off-contract May 15 – August 15.</strong> Summer defenses are possible, but only when your chair and committee agree to work off-contract. If any milestone in your plan lands in this window, the tool will flag it below — confirm faculty availability with your chair before counting on it.
+      <strong>Faculty are off-contract May 15 – August 15.</strong> If your plan depends on summer faculty work, your plan needs to change.
     </div>
-    <p class="intro-verify">Always confirm with your chair, your DGS, and the Graduate School before acting.</p>
+    <div class="intro-callout" style="background:#eef3fb;border-color:var(--steel-blue);border-left-color:var(--steel-blue);">
+      <strong>Defenses can only be scheduled when classes are in session</strong> &mdash; fall, spring, or summer session. The gaps between terms are not available. Exceptions require your DGS to petition the Graduate School Dean.
+    </div>
+    <p class="intro-verify">Rules and dates here may be updated to reflect current university and accreditation policy, and updates are enforced as of the date they take effect. For course requirements, refer to the Graduate Catalog for the year you started your program &mdash; the catalog governs. Always confirm with your chair, your DGS, and the Graduate School before acting.</p>
   </div>
 
   <form id="form" class="card" novalidate>
     <p class="section-title">Tell us where you are</p>
 
     <div class="field">
-      <fieldset class="radio-fieldset">
-        <legend class="q">Which doctoral program are you in?</legend>
-        <div class="hint">Determines which pre-defense prerequisites apply.</div>
-        <div class="radio-group">
-          <label><input type="radio" name="program" value="phd"> PhD</label>
-          <label><input type="radio" name="program" value="edd"> EdD</label>
-        </div>
-      </fieldset>
+      <label class="q">Which doctoral program are you in?</label>
+      <div class="hint">Determines which pre-defense prerequisites apply.</div>
+      <div class="radio-group" data-name="program">
+        <label><input type="radio" name="program" value="phd"> PhD</label>
+        <label><input type="radio" name="program" value="edd"> EdD</label>
+      </div>
     </div>
 
     <div class="field">
@@ -745,10 +709,12 @@
       <div class="hint">"As soon as possible" picks the soonest term whose deadlines you haven't already missed.</div>
       <select id="term" name="term">
         <option value="asap">As soon as possible</option>
-        <option value="summer-2026">Summer 2026 (August degree)</option>
         <option value="fall-2026">Fall 2026 (December degree)</option>
         <option value="spring-2027">Spring 2027 (May degree)</option>
         <option value="summer-2027">Summer 2027 (August degree)</option>
+        <option value="fall-2027">Fall 2027 (December degree) — provisional dates</option>
+        <option value="spring-2028">Spring 2028 (May degree) — provisional dates</option>
+        <option value="summer-2028">Summer 2028 (August degree) — provisional dates</option>
       </select>
     </div>
 
@@ -759,79 +725,80 @@
     </div>
 
     <div class="field conditional" id="progressPhdField">
-      <fieldset class="radio-fieldset">
-        <legend class="q">Where is your dissertation work — concretely?</legend>
-        <div class="hint">PhD progress check. Be honest — the verdict below is only as accurate as this answer.</div>
-        <div class="radio-group">
-          <label><input type="radio" name="progressPhd" value="ready"> Defense-ready or near-final draft of the whole dissertation</label>
-          <label><input type="radio" name="progressPhd" value="drafted"> Data collected and Ch. 4 and 5 drafted; revisions and integration ongoing</label>
-          <label><input type="radio" name="progressPhd" value="writing"> Data collected; Ch. 4 and 5 still in active writing</label>
-          <label><input type="radio" name="progressPhd" value="collecting"> Still collecting or analyzing data</label>
-          <label><input type="radio" name="progressPhd" value="early"> Earlier than that (proposal stage or before)</label>
-        </div>
-      </fieldset>
+      <label class="q">Where is your dissertation work — concretely?</label>
+      <div class="hint">PhD progress check. Be honest — the verdict below is only as accurate as this answer.</div>
+      <div class="radio-group" data-name="progressPhd">
+        <label><input type="radio" name="progressPhd" value="ready"> Defense-ready or near-final draft of the whole dissertation</label>
+        <label><input type="radio" name="progressPhd" value="drafted"> Data collected and Ch. 4 and 5 drafted; revisions and integration ongoing</label>
+        <label><input type="radio" name="progressPhd" value="writing"> Data collected; Ch. 4 and 5 still in active writing</label>
+        <label><input type="radio" name="progressPhd" value="collecting"> Still collecting or analyzing data</label>
+        <label><input type="radio" name="progressPhd" value="early"> Earlier than that (proposal stage or before)</label>
+      </div>
     </div>
 
     <div class="field conditional" id="progressEddField">
-      <fieldset class="radio-fieldset">
-        <legend class="q">Where is your dissertation work — concretely?</legend>
-        <div class="hint">EdD progress check. Be honest — the verdict below is only as accurate as this answer.</div>
-        <div class="radio-group">
-          <label><input type="radio" name="progressEdd" value="ready"> Defense-ready or near-final draft of the whole dissertation</label>
-          <label><input type="radio" name="progressEdd" value="drafted"> Evaluation data analyzed; results, monitoring, and conclusions drafted; revisions and integration ongoing</label>
-          <label><input type="radio" name="progressEdd" value="writing"> Evaluation data analyzed; results / monitoring / conclusions still in active writing</label>
-          <label><input type="radio" name="progressEdd" value="collecting"> Still collecting or analyzing evaluation-phase data</label>
-          <label><input type="radio" name="progressEdd" value="early"> Earlier than that (reconnaissance or planning phase)</label>
-        </div>
-      </fieldset>
+      <label class="q">Where is your dissertation work — concretely?</label>
+      <div class="hint">EdD progress check. Be honest — the verdict below is only as accurate as this answer.</div>
+      <div class="radio-group" data-name="progressEdd">
+        <label><input type="radio" name="progressEdd" value="ready"> Defense-ready or near-final draft of the whole dissertation</label>
+        <label><input type="radio" name="progressEdd" value="drafted"> Evaluation data analyzed; results, monitoring, and conclusions drafted; revisions and integration ongoing</label>
+        <label><input type="radio" name="progressEdd" value="writing"> Evaluation data analyzed; results / monitoring / conclusions still in active writing</label>
+        <label><input type="radio" name="progressEdd" value="collecting"> Still collecting or analyzing evaluation-phase data</label>
+        <label><input type="radio" name="progressEdd" value="early"> Earlier than that (reconnaissance or planning phase)</label>
+      </div>
     </div>
 
     <div class="field">
-      <fieldset class="radio-fieldset">
-        <legend class="q">Have you completed two semesters of post-qualifying residency (767)?</legend>
-        <div class="hint">You must complete two semesters of 767 after passing your qualifying exam before you can sit for the final defense.</div>
-        <div class="radio-group">
-          <label><input type="radio" name="residency" value="yes"> Yes, two or more</label>
-          <label><input type="radio" name="residency" value="no"> No, fewer than two</label>
-          <label><input type="radio" name="residency" value="unsure"> Not sure</label>
-        </div>
-      </fieldset>
+      <label class="q">How many semesters of 767 (post-qualifying dissertation residency) have you completed?</label>
+      <div class="hint">You must complete a minimum of two before you can graduate, and stay continuously enrolled every fall and spring until you defend. Summer doesn't require enrollment and doesn't count toward the two.</div>
+      <div class="radio-group" data-name="residency">
+        <label><input type="radio" name="residency" value="two-plus"> Two or more — requirement met</label>
+        <label><input type="radio" name="residency" value="one"> One — currently working on the second</label>
+        <label><input type="radio" name="residency" value="zero-qe-passed"> None yet, but I've passed my qualifying exam</label>
+        <label><input type="radio" name="residency" value="no-qe"> I haven't passed my qualifying exam yet</label>
+        <label><input type="radio" name="residency" value="unsure"> Not sure</label>
+      </div>
     </div>
 
     <div class="field">
-      <fieldset class="radio-fieldset">
-        <legend class="q">Is a complete draft of the dissertation in your committee chair's hands — and has your chair reviewed and approved it for distribution?</legend>
-        <div class="hint">The formal NOTIF rule: chair must have a complete draft that they have reviewed and approved before NOTIF can be filed. "Sent but not reviewed" does not count.</div>
-        <div class="radio-group">
-          <label><input type="radio" name="chairDraft" value="yes"> Yes — chair has reviewed and approved</label>
-          <label><input type="radio" name="chairDraft" value="no"> Not yet</label>
-        </div>
-      </fieldset>
+      <label class="q">Is your academic record clear?</label>
+      <div class="hint">The Graduate School audits your record when the NOTIF comes in. Outstanding "I" (Incomplete) or "S" grades in letter-graded courses, or academic probation, will stop you from sitting for the final examination.</div>
+      <div class="radio-group" data-name="record">
+        <label><input type="radio" name="record" value="clear"> Clear — no outstanding I/S grades, not on probation</label>
+        <label><input type="radio" name="record" value="grades"> I have outstanding "I" or "S" grades</label>
+        <label><input type="radio" name="record" value="probation"> I'm on academic probation</label>
+        <label><input type="radio" name="record" value="unsure"> Not sure</label>
+      </div>
     </div>
 
     <div class="field">
-      <fieldset class="radio-fieldset">
-        <legend class="q">Have all your committee members had the chance to review at least some part of your dissertation?</legend>
-        <div class="hint">The EDL Dissertation Defense page asks the student to have every committee member review at least some part before NOTIF — and you verify this on the form itself.</div>
-        <div class="radio-group">
-          <label><input type="radio" name="committee" value="none"> No one has seen anything substantive</label>
-          <label><input type="radio" name="committee" value="chair"> Only my chair</label>
-          <label><input type="radio" name="committee" value="some"> Some members, not all</label>
-          <label><input type="radio" name="committee" value="all"> All members</label>
-        </div>
-      </fieldset>
+      <label class="q">Is a complete draft of the dissertation in your committee chair's hands — and has your chair reviewed and approved it for distribution?</label>
+      <div class="hint">The formal NOTIF rule: chair must have a complete draft that they have reviewed and approved before NOTIF can be filed. "Sent but not reviewed" does not count.</div>
+      <div class="radio-group" data-name="chairDraft">
+        <label><input type="radio" name="chairDraft" value="yes"> Yes — chair has reviewed and approved</label>
+        <label><input type="radio" name="chairDraft" value="no"> Not yet</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="q">Have all your committee members had the chance to review at least some part of your dissertation?</label>
+      <div class="hint">The EDL Dissertation Defense page asks the student to have every committee member review at least some part before NOTIF — and you verify this on the form itself.</div>
+      <div class="radio-group" data-name="committee">
+        <label><input type="radio" name="committee" value="none"> No one has seen anything substantive</label>
+        <label><input type="radio" name="committee" value="chair"> Only my chair</label>
+        <label><input type="radio" name="committee" value="some"> Some members, not all</label>
+        <label><input type="radio" name="committee" value="all"> All members</label>
+      </div>
     </div>
 
     <div class="field conditional" id="enrollmentField">
-      <fieldset class="radio-fieldset">
-        <legend class="q">For your target term, will you be enrolled in 767 (or 2hr post-residency)?</legend>
-        <div class="hint">During the academic year (fall and spring), Graduate School policy is clear: you cannot defend without 767 (or 2hr post-residency) enrollment in that term. Summer is exempt if you are scheduled to defend.</div>
-        <div class="radio-group">
-          <label><input type="radio" name="enrollment" value="yes"> Yes, enrollment is confirmed</label>
-          <label><input type="radio" name="enrollment" value="no"> No, I won't be enrolled</label>
-          <label><input type="radio" name="enrollment" value="unsure"> Not sure yet</label>
-        </div>
-      </fieldset>
+      <label class="q">For your target term, will you be enrolled in 767?</label>
+      <div class="hint">During the academic year (fall and spring), Graduate School policy is clear: you cannot defend without 767 enrollment in that term. Summer is exempt if you are scheduled to defend.</div>
+      <div class="radio-group" data-name="enrollment">
+        <label><input type="radio" name="enrollment" value="yes"> Yes, enrollment is confirmed</label>
+        <label><input type="radio" name="enrollment" value="no"> No, I won't be enrolled</label>
+        <label><input type="radio" name="enrollment" value="unsure"> Not sure yet</label>
+      </div>
     </div>
 
     <div class="actions">
@@ -842,12 +809,16 @@
 
   <section id="results" hidden aria-live="polite">
     <div id="verdictBox"></div>
+    <div class="result-section" id="provisionalSection" hidden>
+      <h3>Provisional dates</h3>
+      <div class="off-contract-warning" id="provisionalWarning"></div>
+    </div>
     <div class="result-section" id="offContractSection" hidden>
       <h3>Summer off-contract conflict</h3>
       <div class="off-contract-warning" id="offContractWarning"></div>
     </div>
     <div class="result-section" id="nextActionsSection" hidden>
-      <h3 id="nextActionsHeading">What you'd need to do, in order, to defend</h3>
+      <h3>What you need to do, in order</h3>
       <div class="next-actions" id="nextActions"></div>
     </div>
     <div class="result-section">
@@ -872,7 +843,7 @@
         <button type="button" class="secondary" id="shareLinkBtn">Copy shareable link</button>
         <span class="copy-feedback" id="copyFeedback" aria-live="polite"></span>
       </div>
-      <p class="copy-hint"><strong>Copy report</strong> puts a formatted copy of this report on your clipboard — paste into an email, Word, or Google Docs to keep the styled layout, or into a plain-text editor for a clean ASCII version. Either way, it's the same content, ready to send to your chair, committee, or DGS to drive a focused planning conversation. <strong>Copy shareable link</strong> generates a URL that, when opened, restores these exact answers and re-runs the check — useful for advisors to send to a student, or for a student to bookmark a what-if scenario.</p>
+      <p class="copy-hint"><strong>Copy report</strong> puts a plain-text version of this report on your clipboard — paste into an email to your chair, committee, or DGS to drive a focused planning conversation. <strong>Copy shareable link</strong> generates a URL that, when opened, restores these exact answers and re-runs the check — useful for advisors to send to a student, or for a student to bookmark a what-if scenario.</p>
     </div>
   </section>
 
@@ -889,8 +860,8 @@
     </ul>
     <p class="resources-note">This tool is a personal planning sketch on top of those canonical sources, not a substitute for them. The DGS office, manual, SharePoint, and registrar's calendar are where the authoritative answers live.</p>
   </div>
-  <p><strong>Sources.</strong> University of Kentucky Office of the Registrar academic calendars (Summer 2026 – Summer 2027). UK Graduate School Doctoral Checklist. EDL Doctoral Students SharePoint &mdash; The Dissertation Defense page. Verify all dates and rules with the Graduate School and your DGS before acting.</p>
-  <p style="margin-top:0.5rem;">v7 &middot; built for EDL doctoral advising &middot; not an official Graduate School product.</p>
+  <p><strong>Sources.</strong> UK Office of the Registrar academic calendars (Fall 2026 &ndash; Summer 2027) and Five-Year Calendar (term anchors for Fall 2027 &ndash; Summer 2028; Graduate School deadlines for those terms are projected, not published). <em>Policies &amp; Procedures for Directors of Graduate Studies</em>, UK Graduate School, 2024&ndash;25 (rev. 10/17/24) &mdash; Doctoral Degrees, Doctoral Final Examination, Outside Examiner, and Dissertation sections. UK Graduate School Doctoral Checklist. EDL Doctoral Students SharePoint &mdash; The Dissertation Defense page. Verify all dates and rules with the Graduate School and your DGS before acting.</p>
+  <p style="margin-top:0.5rem;">v13 &middot; built for EDL doctoral advising &middot; not an official Graduate School product.</p>
 </footer>
 
 <script>
@@ -899,20 +870,6 @@
    ===================================================== */
 
 const TERMS = {
-  "summer-2026": {
-    key: "summer-2026",
-    label: "Summer 2026",
-    degreeLabel: "August 2026 degree",
-    type: "summer",
-    sessionBegins:             "2026-05-18",
-    degreeApplicationDeadline: "2026-06-01",
-    notifDeadline:             "2026-06-19",
-    examScheduleDeadline:      "2026-07-14",
-    examSitDeadline:           "2026-07-28",
-    formatReviewDeadline:      "2026-08-05",
-    finalETDDeadline:          "2026-08-12",
-    sessionEnds:               "2026-08-12"
-  },
   "fall-2026": {
     key: "fall-2026",
     label: "Fall 2026",
@@ -954,9 +911,54 @@ const TERMS = {
     formatReviewDeadline:      "2027-07-30",
     finalETDDeadline:          "2027-08-06",
     sessionEnds:               "2027-08-06"
+  },
+  "fall-2027": {
+    key: "fall-2027",
+    label: "Fall 2027",
+    degreeLabel: "December 2027 degree",
+    type: "fall",
+    provisional: true,
+    sessionBegins:             "2027-08-23",
+    notifDeadline:             "2027-09-17",
+    degreeApplicationDeadline: "2027-11-01",
+    examScheduleDeadline:      "2027-11-18",
+    examSitDeadline:           "2027-12-02",
+    formatReviewDeadline:      "2027-12-10",
+    finalETDDeadline:          "2027-12-17",
+    sessionEnds:               "2027-12-17"
+  },
+  "spring-2028": {
+    key: "spring-2028",
+    label: "Spring 2028",
+    degreeLabel: "May 2028 degree",
+    type: "spring",
+    provisional: true,
+    sessionBegins:             "2028-01-10",
+    notifDeadline:             "2028-02-17",
+    degreeApplicationDeadline: "2028-04-01",
+    examScheduleDeadline:      "2028-04-06",
+    examSitDeadline:           "2028-04-20",
+    formatReviewDeadline:      "2028-04-28",
+    finalETDDeadline:          "2028-05-05",
+    sessionEnds:               "2028-05-05"
+  },
+  "summer-2028": {
+    key: "summer-2028",
+    label: "Summer 2028",
+    degreeLabel: "August 2028 degree",
+    type: "summer",
+    provisional: true,
+    sessionBegins:             "2028-05-15",
+    notifDeadline:             "2028-06-11",
+    degreeApplicationDeadline: "2028-06-01",
+    examScheduleDeadline:      "2028-07-06",
+    examSitDeadline:           "2028-07-20",
+    formatReviewDeadline:      "2028-07-28",
+    finalETDDeadline:          "2028-08-04",
+    sessionEnds:               "2028-08-04"
   }
 };
-const TERM_ORDER = ["summer-2026", "fall-2026", "spring-2027", "summer-2027"];
+const TERM_ORDER = ["fall-2026", "spring-2027", "summer-2027", "fall-2027", "spring-2028", "summer-2028"];
 
 const PROGRESS_RANK = {
   "early":      0,   // proposal/recon — far from defense
@@ -971,6 +973,8 @@ const REVISION_BUFFER_DAYS = 60;    // Grad School permits up to 60 days from de
 const NOTIF_LEAD_DAYS      = 56;    // 8 weeks: NOTIF must be submitted this far before defense
 const CHAIR_LEAD_DAYS      = 70;    // ~10 weeks: chair should have approved a complete draft for distribution
 const DIST_LEAD_DAYS       = 56;    // ~8 weeks: committee members should have manuscript
+const REQUEST_EXAM_DAYS    = 14;    // Request for Final Examination: at least 2 weeks before the exam
+const OUTSIDE_COPY_DAYS    = 14;    // Approved dissertation to Outside Examiner: at least 2 weeks before
 
 /* ----- Utilities ----- */
 function parseDate(s) { return new Date(s + "T00:00:00"); }
@@ -1016,51 +1020,62 @@ function evaluate(input) {
   // Latest allowable: the term's exam-sit deadline (absolute backstop, not advised).
   const recommendedDefense = subDays(term.finalETDDeadline, REVISION_BUFFER_DAYS);
   const latestDefense = term.examSitDeadline;
-
-  // -- NOTIF dates (both paths) --
   const calendarNotifDeadline = term.notifDeadline;
-  const eightWeeksBeforeRecommended = subDays(recommendedDefense, NOTIF_LEAD_DAYS);
-  const eightWeeksBeforeLatest      = subDays(latestDefense, NOTIF_LEAD_DAYS);
-  const recommendedNotifEffective = eightWeeksBeforeRecommended < calendarNotifDeadline
-    ? eightWeeksBeforeRecommended : calendarNotifDeadline;
-  const latestNotifEffective = eightWeeksBeforeLatest < calendarNotifDeadline
-    ? eightWeeksBeforeLatest : calendarNotifDeadline;
 
-  // Path reachability — measured at the NOTIF, since that's the binding action
-  const recommendedReachable = recommendedNotifEffective >= today;
-  const latestReachable      = latestNotifEffective      >= today;
+  // -- Earliest defense date still physically reachable from today --
+  // Every step that hasn't happened yet carries its own lead time. The longest
+  // outstanding one sets the floor; you cannot defend sooner than that no matter
+  // what the calendar allows. This is what keeps milestone dates out of the past.
+  let requiredLead = NOTIF_LEAD_DAYS;                                        // NOTIF is always still ahead
+  if (input.chairDraft !== "yes") requiredLead = Math.max(requiredLead, CHAIR_LEAD_DAYS);
+  if (input.committee  !== "all") requiredLead = Math.max(requiredLead, DIST_LEAD_DAYS);
+  const earliestFeasibleDefense = isoDate(addDays(parseDate(today), requiredLead));
 
-  // Planning track: prefer recommended; fall back to latest if recommended path is dead but latest is alive
-  const planningDefense = recommendedReachable ? recommendedDefense : latestDefense;
-  const effectiveNotifDeadline = recommendedReachable ? recommendedNotifEffective : latestNotifEffective;
-  const eightWeeksBeforePlanning = recommendedReachable ? eightWeeksBeforeRecommended : eightWeeksBeforeLatest;
+  // -- Planning track --
+  // Aim for the recommended date; if the lead times no longer fit, slide to the
+  // earliest date that does; if that overshoots the term, the term is out of reach.
+  let planningDefense = earliestFeasibleDefense > recommendedDefense
+    ? earliestFeasibleDefense
+    : recommendedDefense;
+  const termUnreachable = planningDefense > latestDefense;
+  if (termUnreachable) planningDefense = latestDefense;
+
+  const recommendedReachable = !termUnreachable && planningDefense <= recommendedDefense;
+
+  const eightWeeksBeforePlanning = subDays(planningDefense, NOTIF_LEAD_DAYS);
+  const effectiveNotifDeadline = eightWeeksBeforePlanning < calendarNotifDeadline
+    ? eightWeeksBeforePlanning
+    : calendarNotifDeadline;
   const calendarBinds = calendarNotifDeadline <= eightWeeksBeforePlanning;
 
   // -- Pre-defense milestones (relative to planning defense date) --
   const chairApprovalBy   = subDays(planningDefense, CHAIR_LEAD_DAYS);
   const committeeDistBy   = subDays(planningDefense, DIST_LEAD_DAYS);
+  const requestExamBy     = subDays(planningDefense, REQUEST_EXAM_DAYS);
+  const outsideCopyBy     = subDays(planningDefense, OUTSIDE_COPY_DAYS);
 
   // -- Off-contract conflict detection (May 15 – Aug 15) --
   const offContractConflicts = [];
-  if (isInOffContract(chairApprovalBy)) {
+  const flagOffContract = (dateStr) => dateStr >= today && isInOffContract(dateStr);
+  if (flagOffContract(chairApprovalBy)) {
     offContractConflicts.push({
       milestone: "Chair approval of complete draft",
       date: chairApprovalBy
     });
   }
-  if (isInOffContract(committeeDistBy)) {
+  if (flagOffContract(committeeDistBy)) {
     offContractConflicts.push({
       milestone: "Distribute manuscript to committee",
       date: committeeDistBy
     });
   }
-  if (isInOffContract(effectiveNotifDeadline)) {
+  if (flagOffContract(effectiveNotifDeadline)) {
     offContractConflicts.push({
       milestone: "Submit NOTIF",
       date: effectiveNotifDeadline
     });
   }
-  if (isInOffContract(planningDefense)) {
+  if (flagOffContract(planningDefense)) {
     offContractConflicts.push({
       milestone: "Defense itself",
       date: planningDefense
@@ -1071,41 +1086,71 @@ function evaluate(input) {
   const gates = [];
 
   // ===== ELIGIBILITY =====
-  // Residency
-  if (input.residency === "yes") {
+  // Residency — two semesters of 767 required before graduating; fall/spring only
+  const termIsAcademicYear = term.type !== "summer";
+  if (input.residency === "two-plus") {
     gates.push({ category: "Eligibility to defend",
-      name: "Two semesters of post-qualifying residency complete", status: "ok" });
-  } else if (input.residency === "unsure") {
+      name: "Two or more semesters of 767 complete — residency requirement met", status: "ok" });
+  } else if (input.residency === "one") {
+    gates.push({ category: "Eligibility to defend",
+      name: "One semester of 767 complete — second still in progress",
+      status: termIsAcademicYear ? "warn" : "miss",
+      detail: termIsAcademicYear
+        ? `If you are enrolled in 767 this term, ${term.label} would be your second semester and you would meet the minimum by the end of it. Confirm with your DGS that defending in the same term your second 767 completes is acceptable in your case — the rule reads "before they can graduate," not "before the exam."`
+        : "Summer enrollment doesn't count toward the two required semesters, and 767 isn't offered as a required summer enrollment. You'll need another fall or spring semester before you can graduate." });
+  } else if (input.residency === "zero-qe-passed") {
+    gates.push({ category: "Eligibility to defend",
+      name: "Qualifying exam passed, but no 767 semesters completed yet", status: "miss",
+      detail: "You need two fall/spring semesters of 767 before you can graduate. If you passed your qualifying exam recently and the add/drop window for this term is still open, you can enroll in 767 now and start the clock this term — that's worth doing today rather than waiting a semester." });
+  } else if (input.residency === "no-qe") {
+    gates.push({ category: "Eligibility to defend",
+      name: "Qualifying exam not yet passed", status: "miss",
+      detail: "The qualifying exam comes first. Post-qualifying residency (767) can only begin after you pass it, and two semesters of 767 are required before you can graduate. Note that 757 is available for the semester in which you sit for the qualifying exam." });
+  } else {
     gates.push({ category: "Eligibility to defend",
       name: "Post-qualifying residency status unclear",
       status: "warn",
-      detail: "Confirm with the Grad School how many semesters of 767 you have completed post-qualifying." });
+      detail: "Check myUK or ask your DGS how many semesters of 767 you have completed post-qualifying. You need two before you can graduate." });
+  }
+
+  // Academic record — Grad School audits this when NOTIF is submitted
+  if (input.record === "clear") {
+    gates.push({ category: "Eligibility to defend",
+      name: "Academic record clear (no outstanding I/S grades, not on probation)", status: "ok" });
+  } else if (input.record === "grades") {
+    gates.push({ category: "Eligibility to defend",
+      name: "Outstanding \"I\" or \"S\" grades on record", status: "miss",
+      detail: "You will not be allowed to sit for the Final Examination until any remaining \"I\" or \"S\" grades in letter-graded courses have been converted to letter grades. The Graduate School audits this when your NOTIF arrives — resolve it well before then." });
+  } else if (input.record === "probation") {
+    gates.push({ category: "Eligibility to defend",
+      name: "On academic probation", status: "miss",
+      detail: "Students on academic probation are not eligible to sit for the doctoral final examination, and a degree cannot be awarded while on probation. Clearing probation comes first." });
   } else {
     gates.push({ category: "Eligibility to defend",
-      name: "Post-qualifying residency not complete", status: "miss",
-      detail: "Two semesters of 767 after the qualifying exam are required before you can sit for the defense. This blocks all defense terms until completed." });
+      name: "Academic record status unclear", status: "warn",
+      detail: "Check myUK for any \"I\" or \"S\" grades in letter-graded courses and confirm you are not on probation. Both will block the final examination." });
   }
 
   // Academic-year enrollment
   if (term.type !== "summer") {
     if (input.enrollment === "yes") {
       gates.push({ category: "Eligibility to defend",
-        name: `${term.label} 767 (or 2hr post-residency) enrollment confirmed`, status: "ok" });
+        name: `${term.label} 767 enrollment confirmed`, status: "ok" });
     } else if (input.enrollment === "unsure") {
       gates.push({ category: "Eligibility to defend",
         name: `${term.label} 767 enrollment unconfirmed`,
         status: "warn",
-        detail: "Academic-year defenses require enrollment in 767 (or 2hr post-residency). Confirm before planning further." });
+        detail: "Academic-year defenses require enrollment in 767. Confirm before planning further." });
     } else {
       gates.push({ category: "Eligibility to defend",
         name: `${term.label} 767 enrollment missing`,
         status: "miss",
-        detail: "Per Graduate School policy, you cannot defend during the academic year without enrollment in 767 or 2hr post-residency for that term." });
+        detail: "Per Graduate School policy, you cannot defend during the academic year without enrollment in 767 for that term." });
     }
   } else {
     gates.push({ category: "Eligibility to defend",
       name: "Summer enrollment — exempt", status: "ok",
-      detail: "You do not need to enroll in 767 over the summer to defend, provided you are scheduled to defend by the summer exam deadline and have already banked your two semesters of post-qualifying residency." });
+      detail: "Continuous 767 enrollment is required every fall and spring, not summer. You can defend over the summer without enrolling, provided your two required semesters of 767 are already banked and you are scheduled to defend by the summer exam deadline." });
   }
 
   // ===== NOTIF READINESS — can you fill it out? =====
@@ -1228,34 +1273,43 @@ function evaluate(input) {
   const warns  = gates.filter(g => g.status === "warn").length;
 
   let verdict, reason;
-  // Hard blockers first
-  if (input.residency === "no") {
-    verdict = "NO";
-    reason = "You cannot defend in any term until two semesters of post-qualifying residency are complete.";
+  // Hard blockers first — stated as scheduling facts with a forward path, not as failures
+  if (input.residency === "no-qe") {
+    verdict = "NOT THIS TERM";
+    reason = `The qualifying exam comes first, then two semesters of 767. That sequence is fixed, so ${term.label} isn't the term — but the path from here is clear, and it starts with scheduling the exam.`;
+  } else if (input.residency === "zero-qe-passed") {
+    verdict = "NOT THIS TERM";
+    reason = `You're past the qualifying exam, which is the hard part. What's left is time: two fall/spring semesters of 767. If add/drop is still open, enroll now — that makes this term count as your first and pulls your whole timeline forward a semester.`;
+  } else if (input.record === "probation") {
+    verdict = "NOT THIS TERM";
+    reason = `Academic probation has to be cleared before a final examination can be scheduled or a degree awarded. That's the one thing to work on right now, and your DGS can help you map it.`;
   } else if (term.type !== "summer" && input.enrollment === "no") {
-    verdict = "NO";
-    reason = `${term.label} requires 767 (or 2hr post-residency) enrollment. Without it, no defense in this term is permitted by the Graduate School.`;
+    verdict = "NOT THIS TERM";
+    reason = `Defending during fall or spring requires 767 enrollment in that term. If you can still enroll for ${term.label}, this becomes a live option again — worth a call to your DGS today.`;
+  } else if (termUnreachable) {
+    verdict = "NOT THIS TERM";
+    reason = `Working back from what's still outstanding, the earliest you could defend is ${prettyDate(earliestFeasibleDefense)} — past ${term.label}'s last exam date of ${prettyDate(latestDefense)}. The lead times are the constraint, not your progress. The next term below is the honest target.`;
   } else if (daysUntilNotif < 0) {
-    verdict = "NO";
-    reason = `The effective NOTIF deadline for ${term.label} (${prettyDate(effectiveNotifDeadline)}) has already passed.`;
+    verdict = "NOT THIS TERM";
+    reason = `The NOTIF deadline for ${term.label} (${prettyDate(effectiveNotifDeadline)}) has passed, so the Graduate School can't line up an outside examiner in time. Nothing is lost — look at the next term below and plan against its dates instead.`;
   } else if (draftRank <= 1) {
     verdict = "NOT YET";
-    reason = `Your work is not yet at the stage where ${term.label} is feasible. The fix is not procedural — it's the work itself.`;
+    reason = `The distance between here and a defense is writing, not paperwork. That's worth knowing plainly: no form or deadline will move faster than the manuscript does. ${term.label} isn't realistic, but the next term is a real target if the writing moves.`;
   } else if (misses >= 2) {
     verdict = "NOT YET";
-    reason = `Multiple gates are not in place for ${term.label}. Plan toward a later term and use the time for the work, not the paperwork.`;
+    reason = `A few things aren't in place for ${term.label} yet. Each is fixable — they're listed below in the order they need to happen. A later term gives you room to do them properly rather than in a scramble.`;
   } else if (misses === 1) {
     verdict = "NOT YET";
-    reason = `One blocking item stands between you and ${term.label}. Resolve it or target a later term.`;
+    reason = `One thing stands between you and ${term.label}. It's identified below. Clear it and this term reopens; if it can't clear in time, the next term is close behind.`;
   } else if (warns >= 2) {
     verdict = "TIGHT";
-    reason = `${term.label} is procedurally reachable, but several items need to align quickly. The work behind those items is yours to do.`;
+    reason = `${term.label} is reachable, and several things need to line up quickly for it to hold. Look closely at the dates below before you commit to this term — and talk it through with your chair.`;
   } else if (warns === 1) {
     verdict = "TIGHT";
-    reason = `${term.label} is reachable, but one item needs attention soon.`;
+    reason = `${term.label} works, with one item that needs attention soon. It's flagged below.`;
   } else {
-    verdict = "GO";
-    reason = `Your answers suggest ${term.label} is procedurally reachable. The work itself still has to happen — committee feedback, your time at the keyboard, the dissertation defending itself in the room.`;
+    verdict = "ON TRACK";
+    reason = `Nothing procedural is standing in your way for ${term.label}. The dates below are yours to hit. What remains is the work itself — committee feedback, revision, and the dissertation holding up in the room.`;
   }
 
   // Build timeline
@@ -1263,21 +1317,25 @@ function evaluate(input) {
     { date: term.sessionBegins, name: "Session begins", desc: term.label + " begins.", critical: false }
   ];
 
-  // Chair approval milestone
-  timelineEvents.push({
-    date: chairApprovalBy,
-    name: "Chair approval of complete draft — target",
-    desc: "~10 weeks before defense. Chair should have reviewed and approved the complete draft for distribution to the rest of the committee.",
-    critical: false
-  });
+  // Chair approval milestone — only if still outstanding
+  if (input.chairDraft !== "yes") {
+    timelineEvents.push({
+      date: chairApprovalBy,
+      name: "Chair approval of complete draft — target",
+      desc: "~10 weeks before defense. Your chair needs to have reviewed and approved the complete draft for distribution to the rest of the committee.",
+      critical: false
+    });
+  }
 
-  // Committee distribution milestone
-  timelineEvents.push({
-    date: committeeDistBy,
-    name: "Distribute manuscript to full committee — target",
-    desc: "~8 weeks before defense. Committee members need substantial time to read and provide feedback. They should not be reading for the first time in the two weeks before the defense.",
-    critical: false
-  });
+  // Committee distribution milestone — only if still outstanding
+  if (input.committee !== "all") {
+    timelineEvents.push({
+      date: committeeDistBy,
+      name: "Distribute manuscript to full committee — target",
+      desc: "~8 weeks before defense. Committee members need substantial time to read and respond. They should not be reading for the first time in the two weeks before the defense.",
+      critical: false
+    });
+  }
 
   // NOTIF deadline row(s)
   if (effectiveNotifDeadline === calendarNotifDeadline) {
@@ -1308,7 +1366,13 @@ function evaluate(input) {
     { date: term.degreeApplicationDeadline, name: "Degree application deadline",
       desc: `Apply for the ${term.degreeLabel} in myUK by this date.`, critical: false },
     { date: term.examScheduleDeadline, name: "Last day to schedule final exam",
-      desc: "The defense must be scheduled by this date for this term.", critical: false }
+      desc: "The defense must be scheduled by this date for this term.", critical: false },
+    { date: requestExamBy, name: "Request for Final Examination — due",
+      desc: "A separate form from the NOTIF. Once the Graduate School has appointed your Outside Examiner, submit the Request for Final Examination at least two weeks before the exam date.",
+      critical: true },
+    { date: outsideCopyBy, name: "Deliver approved dissertation to the Outside Examiner",
+      desc: "You must give the Outside Examiner a complete, chair-approved copy of the dissertation at least two weeks before the examination.",
+      critical: true }
   );
 
   // Recommended defense date row (if it's still in the future)
@@ -1337,13 +1401,13 @@ function evaluate(input) {
     { date: term.formatReviewDeadline, name: "ETD format review deadline",
       desc: "Submit dissertation to the Graduate School via UKnowledge for format review.", critical: false },
     { date: term.finalETDDeadline, name: "Final ETD acceptance deadline",
-      desc: "Final revised ETD must be accepted by the Graduate School for the degree to confer.", critical: true }
+      desc: `Final revised ETD must be accepted by the Graduate School for the degree to confer. Note the University Calendar's wording: this date applies to students who submitted for format review on ${prettyDate(term.formatReviewDeadline)}. Miss the format review deadline and you lose the protection of this one.`, critical: true }
   );
   timelineEvents.sort((a,b) => a.date.localeCompare(b.date));
 
   // Next-term suggestion
   let nextTermSuggestion = null;
-  if (verdict !== "GO") {
+  if (verdict !== "ON TRACK") {
     const currentIndex = TERM_ORDER.indexOf(term.key);
     if (currentIndex >= 0 && currentIndex < TERM_ORDER.length - 1) {
       const nextKey = TERM_ORDER[currentIndex + 1];
@@ -1353,6 +1417,48 @@ function evaluate(input) {
 
   // ===== Next actions — the concrete to-do list =====
   const nextActions = [];
+
+  // 0a. Residency blockers — the qualifying exam and 767 clock gate everything downstream
+  if (input.residency === "no-qe") {
+    nextActions.push({
+      deadline: null,
+      action: "Pass the qualifying exam.",
+      note: "Everything downstream depends on it. You can enroll in 757 for the semester in which you sit for the exam; it counts as full-time. Once you pass, the two-semester 767 clock starts."
+    });
+  } else if (input.residency === "zero-qe-passed") {
+    nextActions.push({
+      deadline: null,
+      action: "Enroll in 767 now — during add/drop if the window is still open.",
+      note: "If you passed your qualifying exam recently, you can add 767 during the add/drop window and have this term count as your first of two. Waiting until next term costs you a full semester on the calendar. Check the registrar's add deadline for this term."
+    });
+  } else if (input.residency === "one") {
+    nextActions.push({
+      deadline: null,
+      action: "Confirm you're enrolled in 767 this term and that it will be your second semester.",
+      note: "Two semesters are required before you can graduate. Confirm with your DGS whether defending in the same term your second 767 completes works in your case."
+    });
+  }
+
+  // 0b. Record blockers — they stop the exam regardless of everything else
+  if (input.record === "probation") {
+    nextActions.push({
+      deadline: null,
+      action: "Clear academic probation.",
+      note: "You cannot sit for the final examination or be awarded a degree while on probation. Work with your DGS on the path back to good standing before planning a defense."
+    });
+  } else if (input.record === "grades") {
+    nextActions.push({
+      deadline: null,
+      action: "Convert outstanding \"I\" or \"S\" grades to letter grades.",
+      note: "Contact the instructors of record and your DGS. The Graduate School audits for these when your NOTIF arrives, and they will stop the examination."
+    });
+  } else if (input.record === "unsure") {
+    nextActions.push({
+      deadline: null,
+      action: "Check myUK for outstanding \"I\" or \"S\" grades and confirm you're not on probation.",
+      note: "Both block the final examination. Worth five minutes now rather than a surprise at the NOTIF audit."
+    });
+  }
 
   // 1. The work itself — comes first when not done
   if (draftRank <= 1) {
@@ -1414,14 +1520,17 @@ function evaluate(input) {
     });
   }
 
-  // 6. Schedule defense — date is ~2 weeks before defense, not the term's backstop
+  // 6. Request for Final Examination — the second form, after outside examiner is appointed
   if (term.examScheduleDeadline > today) {
-    const scheduleBy = subDays(planningDefense, 14);
-    const scheduleAction = scheduleBy > today ? scheduleBy : term.examScheduleDeadline;
     nextActions.push({
-      deadline: scheduleAction,
-      action: "Schedule the final examination with your committee.",
-      note: `After NOTIF is in and the outside examiner is confirmed by the Grad School. Term backstop for scheduling: ${prettyDate(term.examScheduleDeadline)}.`
+      deadline: requestExamBy,
+      action: "Submit the Request for Final Examination.",
+      note: `A second form, separate from the NOTIF. File it only after the Graduate School has notified you that your Outside Examiner has been appointed, and at least two weeks before the exam. Term backstop for scheduling: ${prettyDate(term.examScheduleDeadline)}.`
+    });
+    nextActions.push({
+      deadline: outsideCopyBy,
+      action: "Deliver a complete, approved copy of the dissertation to the Outside Examiner.",
+      note: "Required at least two weeks before the examination. This is your responsibility, not your chair's."
     });
   }
 
@@ -1464,18 +1573,18 @@ function evaluate(input) {
         notif: effectiveNotifDeadline,
         chairBy: chairApprovalBy,
         distBy: committeeDistBy,
-        recommended: recommendedReachable ? recommendedDefense : null,
-        latest: term.examSitDeadline,
-        finalETD: term.finalETDDeadline
+        defense: planningDefense,
+        finalETD: term.finalETDDeadline,
+        latest: term.examSitDeadline
       },
       nextTerm: {
         label: nt.label,
         notif: ntNotif,
         chairBy: ntChairBy,
         distBy: ntDistBy,
-        recommended: ntRec >= today ? ntRec : null,
-        latest: nt.examSitDeadline,
-        finalETD: nt.finalETDDeadline
+        defense: ntRec >= today ? ntRec : nt.examSitDeadline,
+        finalETD: nt.finalETDDeadline,
+        latest: nt.examSitDeadline
       }
     };
   }
@@ -1492,7 +1601,12 @@ function evaluate(input) {
     recommendedReachable,
     chairApprovalBy,
     committeeDistBy,
+    requestExamBy,
+    outsideCopyBy,
     offContractConflicts,
+    earliestFeasibleDefense,
+    termUnreachable,
+    provisional: !!term.provisional,
     gates,
     verdict,
     reason,
@@ -1538,18 +1652,6 @@ function initToday() {
 }
 initToday();
 
-// Staleness check: the hard-coded TERMS table ends with summer-2027.
-// If today is past that term's final ETD deadline, every verdict will be "NO"
-// without explanation — show a banner instead of silently failing.
-(function checkCalendarStale() {
-  const lastTerm = TERMS[TERM_ORDER[TERM_ORDER.length - 1]];
-  const todayStr = isoDate(new Date());
-  if (todayStr > lastTerm.finalETDDeadline) {
-    const banner = document.getElementById("staleBanner");
-    if (banner) banner.hidden = false;
-  }
-})();
-
 // Conditional show of enrollment question
 function refreshEnrollmentField() {
   const targetKey = termInput.value === "asap"
@@ -1590,10 +1692,11 @@ function getRadioValue(name) {
 
 /* ----- Render ----- */
 function renderVerdict(result) {
-  const cls = result.verdict.toLowerCase().replace(" ", "-");
+  const cls = result.verdict.toLowerCase().replace(/\s+/g, "-");
   return `
     <div class="verdict ${cls}">
-      <div class="label">Verdict for ${result.term.label}</div>
+      <div class="label">Your readiness for</div>
+      <div class="term-name">${result.term.label}</div>
       <div class="value">${result.verdict}</div>
       <p class="reason">${result.reason}</p>
       <span class="footnote">This is a procedural read of your timeline. The work itself — writing, analysis, committee feedback — happens between you and your committee.</span>
@@ -1617,19 +1720,18 @@ function renderTermComparison(result) {
   if (!result.termComparison) return null;
   const { thisTerm, nextTerm } = result.termComparison;
   const rows = [
-    ["Recommended defense", thisTerm.recommended, nextTerm.recommended, "60 days before final ETD — full revision window"],
+    ["Recommended defense", thisTerm.defense, nextTerm.defense, "60 days before final ETD"],
     ["NOTIF deadline", thisTerm.notif, nextTerm.notif, "8 weeks before recommended defense (or calendar deadline, whichever is earlier)"],
     ["Chair approval of complete draft", thisTerm.chairBy, nextTerm.chairBy, "~10 weeks before defense"],
     ["Distribute to full committee", thisTerm.distBy, nextTerm.distBy, "~8 weeks before defense"],
     ["Latest allowable defense", thisTerm.latest, nextTerm.latest, "Term-end backstop, not advised"],
     ["Final ETD acceptance", thisTerm.finalETD, nextTerm.finalETD, "Degree confers only after this"]
   ];
-  const fmt = d => d ? prettyDate(d) : '<span class="past-marker">Already past — see latest allowable below</span>';
   const rowHtml = rows.map(([label, a, b, note]) => `
     <tr>
       <td>${label}<span class="compare-note">${note}</span></td>
-      <td class="compare-dates">${fmt(a)}</td>
-      <td class="compare-dates">${fmt(b)}</td>
+      <td class="compare-dates">${prettyDate(a)}</td>
+      <td class="compare-dates">${prettyDate(b)}</td>
     </tr>
   `).join("");
   return `
@@ -1666,6 +1768,14 @@ function renderTimeline(result) {
     `;
   }).join("");
   return `<ol>${items}</ol>`;
+}
+
+function renderProvisional(result) {
+  if (!result.provisional) return null;
+  return `
+    <p><strong>${result.term.label} deadlines below are derived, not published.</strong> The University Registrar has not yet released the full academic calendar for this year. Term start and end dates come from the official Five-Year Calendar; the Graduate School deadlines (NOTIF, exam scheduling, exam sit, format review, final ETD) are projected from the offsets the Registrar has used consistently in every published year.</p>
+    <p style="margin:0.6rem 0 0;">Treat these as planning estimates good to within a few days. Before you commit to anything — a NOTIF date, a defense date, a job start date — confirm against the published calendar once it is released, and with the DGS office.</p>
+  `;
 }
 
 function renderOffContract(result) {
@@ -1727,10 +1837,10 @@ function renderNextTerm(result) {
     ? `
       <div class="summer-caveat-inline">
         <p><strong>Summer is a special case — not a default alternative.</strong> The entire summer term (May 15 – August 15) falls in the standard faculty off-contract window. Defenses scheduled here happen during a period when your chair and committee are typically not contracted to work.</p>
-        <p>Some students and faculty arrange a defense in the late-April / early-May inter-term gap that counts toward an August degree, or negotiate explicit off-contract availability for a true summer defense. This varies by faculty — <strong>talk with your chair</strong> before treating summer as a viable next term.</p>
+        <p>There is also no window that is both in session and before faculty go off contract: the Graduate School only permits final examinations while classes are in session, and summer session begins after the off-contract date. A summer defense therefore depends on your chair and committee agreeing to work off contract, or on your DGS petitioning the Graduate School Dean for an out-of-session exception. Both vary by person and circumstance — <strong>talk with your chair</strong> before treating summer as a viable next term.</p>
       </div>
     `
-    : `<p style="margin-top:0.5rem">Use the additional time to finish drafting and get committee distribution done. ${t.label} is during the academic year, so you'll need to be enrolled in 767 (or 2hr post-residency) for that term — defenses during fall and spring require active enrollment.</p>`;
+    : `<p style="margin-top:0.5rem">Use the additional time to finish drafting and get committee distribution done. ${t.label} is during the academic year, so you'll need to be enrolled in 767 for that term — defenses during fall and spring require active enrollment.</p>`;
 
   return `
     <h3 style="margin-top:0">Consider ${t.label} (${t.degreeLabel})</h3>
@@ -1769,10 +1879,23 @@ function buildTextReport(result) {
   lines.push("- Calendar NOTIF (GS):   " + prettyDate(term.notifDeadline));
   lines.push("- Chair approval by:     " + prettyDate(result.chairApprovalBy));
   lines.push("- Distribute to cttee:   " + prettyDate(result.committeeDistBy));
+  lines.push("- Request Final Exam by: " + prettyDate(result.requestExamBy));
+  lines.push("- Copy to Outside Exmr:  " + prettyDate(result.outsideCopyBy));
   lines.push("- Last day to schedule:  " + prettyDate(term.examScheduleDeadline));
   lines.push("- Format review by:      " + prettyDate(term.formatReviewDeadline));
   lines.push("- Final ETD by:          " + prettyDate(term.finalETDDeadline));
   lines.push("");
+
+  // Provisional dates
+  if (result.provisional) {
+    lines.push("PROVISIONAL DATES");
+    lines.push("The Registrar has not published the full academic calendar for " + term.label + ".");
+    lines.push("Term anchors come from the official Five-Year Calendar; Graduate School");
+    lines.push("deadlines are projected from offsets used consistently in every published");
+    lines.push("year. Treat as estimates good to within a few days and confirm against the");
+    lines.push("published calendar once released.");
+    lines.push("");
+  }
 
   // Off-contract warning
   if (result.offContractConflicts && result.offContractConflicts.length > 0) {
@@ -1835,16 +1958,15 @@ function buildTextReport(result) {
     lines.push("  Milestone                       " + padRight(thisTerm.label, 14) + "  " + nextTerm.label);
     lines.push("  " + "-".repeat(30) + "  " + "-".repeat(14) + "  " + "-".repeat(14));
     const rows = [
-      ["Recommended defense", thisTerm.recommended, nextTerm.recommended],
+      ["Recommended defense", thisTerm.defense, nextTerm.defense],
       ["NOTIF deadline", thisTerm.notif, nextTerm.notif],
       ["Chair approval by", thisTerm.chairBy, nextTerm.chairBy],
       ["Distribute to committee", thisTerm.distBy, nextTerm.distBy],
       ["Latest allowable", thisTerm.latest, nextTerm.latest],
       ["Final ETD", thisTerm.finalETD, nextTerm.finalETD]
     ];
-    const fmtCell = d => d ? prettyDate(d) : "(already past)";
     rows.forEach(([label, a, b]) => {
-      lines.push("  " + padRight(label, 30) + "  " + padRight(fmtCell(a), 14) + "  " + fmtCell(b));
+      lines.push("  " + padRight(label, 30) + "  " + padRight(prettyDate(a), 14) + "  " + prettyDate(b));
     });
     lines.push("");
   }
@@ -1863,17 +1985,15 @@ function buildTextReport(result) {
     lines.push("  Final ETD:           " + prettyDate(t.finalETDDeadline));
     lines.push("");
     if (t.type === "summer") {
-      lines.push(wrapText(
-        "Summer is a special case — not a default alternative. The entire summer term (May 15 – August 15) falls in the standard faculty off-contract window. Defenses scheduled here happen during a period when your chair and committee are typically not contracted to work.",
-        72, "  "));
-      lines.push("");
-      lines.push(wrapText(
-        "Some students and faculty arrange a defense in the late-April / early-May inter-term gap that counts toward an August degree, or negotiate explicit off-contract availability for a true summer defense. This varies by faculty — talk with your chair before treating summer as a viable next term.",
-        72, "  "));
+      lines.push("  Summer is a special case, not a default alternative. The whole summer");
+      lines.push("  term falls in the May 15 - Aug 15 off-contract window, and there is no");
+      lines.push("  window that is both in session and before faculty go off contract. A");
+      lines.push("  summer defense depends on chair and committee agreeing to work off");
+      lines.push("  contract, or on the DGS petitioning the Graduate School Dean for an");
+      lines.push("  out-of-session exception. Talk with your chair first.");
     } else {
-      lines.push(wrapText(
-        "Use the additional time to finish drafting and get committee distribution done. " + t.label + " is during the academic year, so you'll need to be enrolled in 767 (or 2hr post-residency) for that term — defenses during fall and spring require active enrollment.",
-        72, "  "));
+      lines.push("  " + t.label + " is during the academic year, so 767 enrollment in that");
+      lines.push("  term is required — fall and spring defenses need active enrollment.");
     }
     lines.push("");
   }
@@ -1888,207 +2008,6 @@ function buildTextReport(result) {
 function padRight(s, n) {
   if (s.length >= n) return s;
   return s + " ".repeat(n - s.length);
-}
-
-/* ----- HTML report builder (for rich-text clipboard) ----- */
-function buildHtmlReport(result) {
-  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c =>
-    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-  const programLabel = result.input.program === "phd" ? "PhD" : "EdD";
-  const today = prettyDate(result.today);
-  const term = result.term;
-
-  const verdictColors = {
-    "GO":      "#1f7a3a",
-    "TIGHT":   "#b07f12",
-    "NOT YET": "#b25a06",
-    "NO":      "#a31a1a"
-  };
-  const verdictBg = verdictColors[result.verdict] || "#0033A0";
-
-  const SANS = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif";
-  const SERIF = "Georgia, 'Times New Roman', serif";
-  const MONO = "SFMono-Regular, Menlo, Consolas, monospace";
-
-  const wrap = `font-family: ${SANS}; color: #231F20; line-height: 1.5; max-width: 640px; font-size: 14px;`;
-  const eyebrow = `text-transform: uppercase; letter-spacing: 0.12em; font-size: 12px; font-weight: 700; color: #0033A0; margin: 22px 0 10px;`;
-  const tdLabel = `padding: 4px 12px 4px 0; color: #6D6E71; font-size: 13px; vertical-align: top;`;
-  const tdDate  = `padding: 4px 0; font-weight: 600; font-family: ${MONO}; font-size: 13px; color: #0033A0; vertical-align: top;`;
-
-  let html = `<div style="${wrap}">`;
-
-  // Header
-  html += `
-    <div style="border-bottom: 3px solid #C1A875; padding-bottom: 10px; margin-bottom: 16px;">
-      <div style="font-family: ${SERIF}; color: #0033A0; font-size: 22px; font-weight: 700; line-height: 1.1;">Defense Readiness Check</div>
-      <div style="color: #6D6E71; font-size: 13px; margin-top: 3px;">Generated ${esc(today)}</div>
-    </div>
-  `;
-
-  // Program / target term
-  html += `
-    <table style="border-collapse: collapse; margin-bottom: 6px;">
-      <tr><td style="${tdLabel}">Program</td><td style="padding: 4px 0; font-weight: 600;">${esc(programLabel)}</td></tr>
-      <tr><td style="${tdLabel}">Target term</td><td style="padding: 4px 0; font-weight: 600;">${esc(term.label)} <span style="color: #6D6E71; font-weight: 400; font-size: 13px;">(${esc(term.degreeLabel)})</span></td></tr>
-    </table>
-  `;
-
-  // Verdict box
-  html += `
-    <div style="background: ${verdictBg}; color: #ffffff; padding: 16px 20px; border-radius: 6px; margin: 16px 0 4px;">
-      <div style="text-transform: uppercase; letter-spacing: 0.14em; font-size: 13px; font-weight: 700; margin: 0 0 10px; padding-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.4); display: inline-block;">Verdict for ${esc(term.label)}</div>
-      <div style="font-family: ${SERIF}; font-size: 32px; font-weight: 700; margin: 0 0 8px; line-height: 1.05;">${esc(result.verdict)}</div>
-      <div style="font-size: 14px;">${esc(result.reason)}</div>
-      <div style="font-size: 12px; opacity: 0.9; margin-top: 10px; font-style: italic;">A procedural read of your timeline. The work itself — writing, analysis, committee feedback — happens between you and your committee.</div>
-    </div>
-  `;
-
-  // Key dates
-  const keyRows = [
-    ["Recommended defense", prettyDate(result.recommendedDefense) + (result.recommendedReachable ? "" : " (past — collapsed onto latest)")],
-    ["Latest allowable", prettyDate(result.latestDefense)],
-    ["Effective NOTIF", prettyDate(result.effectiveNotifDeadline) + " (" + result.daysUntilNotif + " day" + (result.daysUntilNotif === 1 ? "" : "s") + ")"],
-    ["Calendar NOTIF (GS)", prettyDate(term.notifDeadline)],
-    ["Chair approval by", prettyDate(result.chairApprovalBy)],
-    ["Distribute to committee", prettyDate(result.committeeDistBy)],
-    ["Last day to schedule", prettyDate(term.examScheduleDeadline)],
-    ["Format review by", prettyDate(term.formatReviewDeadline)],
-    ["Final ETD by", prettyDate(term.finalETDDeadline)]
-  ];
-  html += `<div style="${eyebrow}">Key Dates</div><table style="border-collapse: collapse;">`;
-  keyRows.forEach(([label, val]) => {
-    html += `<tr><td style="${tdLabel}">${esc(label)}</td><td style="${tdDate}">${esc(val)}</td></tr>`;
-  });
-  html += `</table>`;
-
-  // Off-contract conflicts
-  if (result.offContractConflicts && result.offContractConflicts.length > 0) {
-    html += `<div style="background: #fff7e6; border: 1px solid #C1A875; border-left: 4px solid #C1A875; padding: 12px 16px; border-radius: 4px; margin: 20px 0;">`;
-    html += `<div style="font-weight: 700; color: #00226b; margin-bottom: 6px;">Summer off-contract conflict</div>`;
-    html += `<div style="font-size: 13px;">These milestones land in the May 15 – Aug 15 chair off-contract window:</div>`;
-    html += `<ul style="margin: 6px 0 0; padding-left: 22px; font-size: 13px;">`;
-    result.offContractConflicts.forEach(c => {
-      html += `<li><strong>${esc(c.milestone)}</strong> — ${esc(prettyDate(c.date))}</li>`;
-    });
-    html += `</ul></div>`;
-  }
-
-  // Next actions
-  if (result.nextActions && result.nextActions.length > 0) {
-    html += `<div style="${eyebrow}">What you'd need to do, in order, to defend in ${esc(term.label)}</div>`;
-    html += `<ol style="padding-left: 22px; margin: 0;">`;
-    result.nextActions.forEach(a => {
-      const dl = a.deadline ? "By " + prettyDate(a.deadline) : "No fixed date — long-pole item";
-      html += `<li style="margin-bottom: 12px;">`;
-      html += `<div style="font-family: ${MONO}; color: #0033A0; font-weight: 600; font-size: 12px; margin-bottom: 2px;">${esc(dl)}</div>`;
-      html += `<strong>${esc(a.action)}</strong>`;
-      if (a.note) {
-        html += `<div style="color: #6D6E71; font-size: 13px; margin-top: 2px;">${esc(a.note)}</div>`;
-      }
-      html += `</li>`;
-    });
-    html += `</ol>`;
-  }
-
-  // Outstanding items
-  const categoryOrder = [
-    "Eligibility to defend",
-    "NOTIF readiness (can you file it?)",
-    "NOTIF timing (when must it be filed?)",
-    "Defense readiness (will you be ready by exam day?)"
-  ];
-  const groups = {};
-  result.gates.forEach(g => {
-    const c = g.category || "Other";
-    if (!groups[c]) groups[c] = [];
-    groups[c].push(g);
-  });
-  html += `<div style="${eyebrow}">Outstanding Items</div>`;
-  categoryOrder.forEach(cat => {
-    if (!groups[cat]) return;
-    html += `<div style="font-weight: 700; font-size: 11px; color: #0033A0; border-bottom: 2px solid #0033A0; padding-bottom: 4px; margin: 14px 0 4px; text-transform: uppercase; letter-spacing: 0.12em;">${esc(cat)}</div>`;
-    html += `<ul style="list-style: none; padding: 0; margin: 0;">`;
-    groups[cat].forEach(g => {
-      const markColor = g.status === "ok" ? "#1f7a3a" : g.status === "warn" ? "#b07f12" : "#a31a1a";
-      const mark = g.status === "ok" ? "✓" : g.status === "warn" ? "!" : "✗";
-      html += `<li style="padding: 6px 0; border-bottom: 1px solid #F5F5F5;">`;
-      html += `<span style="color: ${markColor}; font-weight: 700; margin-right: 8px;">${mark}</span>`;
-      html += `<span>${esc(g.name)}</span>`;
-      if (g.detail) {
-        html += `<div style="color: #6D6E71; font-size: 13px; margin: 4px 0 0 22px;">${esc(g.detail)}</div>`;
-      }
-      html += `</li>`;
-    });
-    html += `</ul>`;
-  });
-
-  // Term comparison
-  if (result.termComparison) {
-    const tc = result.termComparison;
-    html += `<div style="${eyebrow}">This term vs the next</div>`;
-    html += `<div style="font-size: 13px; margin: 0 0 10px;">Delaying doesn't reduce the work — it shifts <em>when</em> the work has to land.</div>`;
-    html += `<table style="border-collapse: collapse; width: 100%; font-size: 13px;">`;
-    html += `<tr>`;
-    html += `<th style="text-align: left; padding: 6px 10px 6px 0; border-bottom: 2px solid #0033A0; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: #6D6E71;">Milestone</th>`;
-    html += `<th style="text-align: left; padding: 6px 10px; border-bottom: 2px solid #0033A0; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: #0033A0;">${esc(tc.thisTerm.label)}</th>`;
-    html += `<th style="text-align: left; padding: 6px 10px; border-bottom: 2px solid #0033A0; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: #0033A0;">${esc(tc.nextTerm.label)}</th>`;
-    html += `</tr>`;
-    const compareRows = [
-      ["Recommended defense", tc.thisTerm.recommended, tc.nextTerm.recommended],
-      ["NOTIF deadline", tc.thisTerm.notif, tc.nextTerm.notif],
-      ["Chair approval by", tc.thisTerm.chairBy, tc.nextTerm.chairBy],
-      ["Distribute to committee", tc.thisTerm.distBy, tc.nextTerm.distBy],
-      ["Latest allowable defense", tc.thisTerm.latest, tc.nextTerm.latest],
-      ["Final ETD acceptance", tc.thisTerm.finalETD, tc.nextTerm.finalETD]
-    ];
-    const fmtCell = d => d
-      ? `<span style="font-family: ${MONO}; color: #0033A0; font-weight: 600;">${esc(prettyDate(d))}</span>`
-      : `<span style="color: #6D6E71; font-style: italic; font-size: 12px;">Already past</span>`;
-    compareRows.forEach(([label, a, b]) => {
-      html += `<tr>`;
-      html += `<td style="padding: 6px 10px 6px 0; border-bottom: 1px solid #F5F5F5; font-weight: 600;">${esc(label)}</td>`;
-      html += `<td style="padding: 6px 10px; border-bottom: 1px solid #F5F5F5;">${fmtCell(a)}</td>`;
-      html += `<td style="padding: 6px 10px; border-bottom: 1px solid #F5F5F5;">${fmtCell(b)}</td>`;
-      html += `</tr>`;
-    });
-    html += `</table>`;
-  }
-
-  // Next term suggestion
-  if (result.nextTermSuggestion) {
-    const t = result.nextTermSuggestion;
-    const rec = subDays(t.finalETDDeadline, REVISION_BUFFER_DAYS);
-    const eightWk = subDays(t.examSitDeadline, NOTIF_LEAD_DAYS);
-    const effN = eightWk < t.notifDeadline ? eightWk : t.notifDeadline;
-    html += `<div style="${eyebrow}">If this term doesn't work</div>`;
-    html += `<div style="background: #e8eef9; border: 1px solid #4A90D9; border-radius: 6px; padding: 12px 16px;">`;
-    html += `<div style="font-weight: 700; color: #00226b; margin-bottom: 8px;">Consider ${esc(t.label)} (${esc(t.degreeLabel)})</div>`;
-    html += `<table style="border-collapse: collapse; font-size: 13px;">`;
-    html += `<tr><td style="${tdLabel}">Recommended defense</td><td style="${tdDate}">${esc(prettyDate(rec))}</td></tr>`;
-    html += `<tr><td style="${tdLabel}">Latest allowable</td><td style="${tdDate}">${esc(prettyDate(t.examSitDeadline))}</td></tr>`;
-    html += `<tr><td style="${tdLabel}">Effective NOTIF</td><td style="${tdDate}">${esc(prettyDate(effN))}</td></tr>`;
-    html += `<tr><td style="${tdLabel}">Final ETD</td><td style="${tdDate}">${esc(prettyDate(t.finalETDDeadline))}</td></tr>`;
-    html += `</table>`;
-    if (t.type === "summer") {
-      html += `<div style="margin-top: 12px; background: #fff7e6; border: 1px solid #C1A875; border-left: 4px solid #C1A875; border-radius: 6px; padding: 10px 14px; font-size: 13px; color: #231F20;">`;
-      html += `<p style="margin: 0 0 8px;"><strong style="color: #00226b;">Summer is a special case — not a default alternative.</strong> The entire summer term (May 15 – August 15) falls in the standard faculty off-contract window. Defenses scheduled here happen during a period when your chair and committee are typically not contracted to work.</p>`;
-      html += `<p style="margin: 0;">Some students and faculty arrange a defense in the late-April / early-May inter-term gap that counts toward an August degree, or negotiate explicit off-contract availability for a true summer defense. This varies by faculty — <strong style="color: #00226b;">talk with your chair</strong> before treating summer as a viable next term.</p>`;
-      html += `</div>`;
-    } else {
-      html += `<p style="margin: 12px 0 0; font-size: 13px;">Use the additional time to finish drafting and get committee distribution done. ${esc(t.label)} is during the academic year, so you'll need to be enrolled in 767 (or 2hr post-residency) for that term — defenses during fall and spring require active enrollment.</p>`;
-    }
-    html += `</div>`;
-  }
-
-  // Footer
-  html += `
-    <div style="border-top: 1px solid #D1D3D4; margin-top: 24px; padding-top: 12px; font-size: 12px; color: #6D6E71;">
-      Generated by the Defense Readiness Check (UK EdD/PhD). Planning aid only — verify all dates and rules with the Graduate School and your DGS.
-    </div>
-  `;
-
-  html += `</div>`;
-  return html;
 }
 
 function wrapText(text, width, indent) {
@@ -2119,6 +2038,7 @@ function doCheck() {
     progressPhd: getRadioValue("progressPhd"),
     progressEdd: getRadioValue("progressEdd"),
     residency: getRadioValue("residency"),
+    record: getRadioValue("record"),
     chairDraft: getRadioValue("chairDraft"),
     committee: getRadioValue("committee"),
     enrollment: getRadioValue("enrollment")
@@ -2130,14 +2050,15 @@ function doCheck() {
   if (input.program === "phd" && !input.progressPhd) missing.push("where the PhD work is");
   if (input.program === "edd" && !input.progressEdd) missing.push("where the EdD work is");
   if (!input.residency) missing.push("residency status");
+  if (!input.record) missing.push("academic record status");
   if (!input.chairDraft) missing.push("chair draft status");
   if (!input.committee) missing.push("committee review status");
   if (TERMS[target].type !== "summer" && !input.enrollment) missing.push("767 enrollment status");
   if (missing.length) {
     results.hidden = false;
     document.getElementById("verdictBox").innerHTML = `
-      <div class="verdict no">
-        <div class="label">Need a little more info</div>
+      <div class="verdict incomplete">
+        <div class="label">A few more answers first</div>
         <div class="value">Incomplete</div>
         <p class="reason">Please answer: ${missing.join(", ")}.</p>
       </div>`;
@@ -2145,6 +2066,7 @@ function doCheck() {
     document.getElementById("checklist").innerHTML = "";
     document.getElementById("nextTermSection").hidden = true;
     document.getElementById("offContractSection").hidden = true;
+    document.getElementById("provisionalSection").hidden = true;
     document.getElementById("nextActionsSection").hidden = true;
     document.getElementById("termCompareSection").hidden = true;
     lastResult = null;
@@ -2158,6 +2080,14 @@ function doCheck() {
   document.getElementById("timeline").innerHTML = renderTimeline(result);
   document.getElementById("checklist").innerHTML = renderChecklist(result);
 
+  const pvHtml = renderProvisional(result);
+  if (pvHtml) {
+    document.getElementById("provisionalWarning").innerHTML = pvHtml;
+    document.getElementById("provisionalSection").hidden = false;
+  } else {
+    document.getElementById("provisionalSection").hidden = true;
+  }
+
   const ocHtml = renderOffContract(result);
   if (ocHtml) {
     document.getElementById("offContractWarning").innerHTML = ocHtml;
@@ -2169,11 +2099,6 @@ function doCheck() {
   const naHtml = renderNextActions(result);
   if (naHtml) {
     document.getElementById("nextActions").innerHTML = naHtml;
-    const termPhrase = targetRaw === "asap"
-      ? "as soon as possible"
-      : "in " + result.term.label;
-    document.getElementById("nextActionsHeading").textContent =
-      "What you'd need to do, in order, to defend " + termPhrase;
     document.getElementById("nextActionsSection").hidden = false;
   } else {
     document.getElementById("nextActionsSection").hidden = true;
@@ -2206,8 +2131,6 @@ resetBtn.addEventListener("click", () => {
   progressEddField.hidden = true;
   lastResult = null;
   results.hidden = true;
-  // Clear any restored-from-link state so a refresh starts clean.
-  history.replaceState(null, "", window.location.pathname);
 });
 
 // Copy report handler
@@ -2219,32 +2142,8 @@ copyReportBtn.addEventListener("click", async () => {
     return;
   }
   const text = buildTextReport(lastResult);
-  const html = buildHtmlReport(lastResult);
-  await copyRichReport(html, text, "Report copied — paste into an email for rich formatting.");
+  await copyToClipboard(text, "Report copied.");
 });
-
-// Rich-format copy: writes both text/html and text/plain so email
-// clients and word processors get the styled version, while plain
-// text editors fall back to the ASCII layout.
-async function copyRichReport(html, text, successMsg) {
-  if (navigator.clipboard && typeof window.ClipboardItem === "function") {
-    try {
-      await navigator.clipboard.write([
-        new ClipboardItem({
-          "text/html":  new Blob([html], { type: "text/html" }),
-          "text/plain": new Blob([text], { type: "text/plain" })
-        })
-      ]);
-      copyFeedback.textContent = successMsg;
-      copyFeedback.classList.add("visible");
-      setTimeout(() => copyFeedback.classList.remove("visible"), 3000);
-      return;
-    } catch (e) {
-      // Fall through to plain-text path
-    }
-  }
-  await copyToClipboard(text, "Report copied (plain text — your browser doesn't support rich-format clipboard).");
-}
 
 // Share link handler
 shareLinkBtn.addEventListener("click", async () => {
@@ -2284,7 +2183,7 @@ async function copyToClipboard(text, successMsg) {
 const SHAREABLE_FIELDS = [
   "term", "today",
   "program", "progressPhd", "progressEdd",
-  "residency", "chairDraft", "committee", "enrollment"
+  "residency", "record", "chairDraft", "committee", "enrollment"
 ];
 
 function currentFormState() {
@@ -2295,6 +2194,7 @@ function currentFormState() {
     progressPhd: getRadioValue("progressPhd"),
     progressEdd: getRadioValue("progressEdd"),
     residency: getRadioValue("residency"),
+    record: getRadioValue("record"),
     chairDraft: getRadioValue("chairDraft"),
     committee: getRadioValue("committee"),
     enrollment: getRadioValue("enrollment")
@@ -2326,7 +2226,7 @@ function applyUrlState(state) {
   if (!state) return false;
   if (state.term) termInput.value = state.term;
   if (state.today) todayInput.value = state.today;
-  const radioFields = ["program", "progressPhd", "progressEdd", "residency", "chairDraft", "committee", "enrollment"];
+  const radioFields = ["program", "progressPhd", "progressEdd", "residency", "record", "chairDraft", "committee", "enrollment"];
   radioFields.forEach(name => {
     const value = state[name];
     if (!value) return;
