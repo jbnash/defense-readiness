@@ -341,6 +341,15 @@
       margin: 0;
       max-width: 68ch;
     }
+    .verdict .verdict-open-door {
+      margin: 0.85rem 0 0;
+      padding-top: 0.8rem;
+      border-top: 1px solid rgba(255,255,255,0.28);
+      font-size: 1.02rem;
+      line-height: 1.5;
+      max-width: 68ch;
+    }
+    .verdict .verdict-open-door strong { color: var(--uk-gold); }
     .verdict.on-track       { background: var(--go); }
     .verdict.tight          { background: var(--tight); }
     .verdict.not-yet        { background: var(--not-yet); }
@@ -441,6 +450,7 @@
       line-height: 1.3;
     }
     .checklist .ok    .mark { color: var(--go); }
+    .checklist .todo  .mark { color: var(--uk-blue); }
     .checklist .warn  .mark { color: var(--tight); }
     .checklist .miss  .mark { color: var(--blocker); }
     .checklist .detail {
@@ -861,7 +871,7 @@
     <p class="resources-note">This tool is a personal planning sketch on top of those canonical sources, not a substitute for them. The DGS office, manual, SharePoint, and registrar's calendar are where the authoritative answers live.</p>
   </div>
   <p><strong>Sources.</strong> UK Office of the Registrar academic calendars (Fall 2026 &ndash; Summer 2027) and Five-Year Calendar (term anchors for Fall 2027 &ndash; Summer 2028; Graduate School deadlines for those terms are projected, not published). <em>Policies &amp; Procedures for Directors of Graduate Studies</em>, UK Graduate School, 2024&ndash;25 (rev. 10/17/24) &mdash; Doctoral Degrees, Doctoral Final Examination, Outside Examiner, and Dissertation sections. UK Graduate School Doctoral Checklist. EDL Doctoral Students SharePoint &mdash; The Dissertation Defense page. Verify all dates and rules with the Graduate School and your DGS before acting.</p>
-  <p style="margin-top:0.5rem;">v13 &middot; built for EDL doctoral advising &middot; not an official Graduate School product.</p>
+  <p style="margin-top:0.5rem;">v14 &middot; built for EDL doctoral advising &middot; not an official Graduate School product.</p>
 </footer>
 
 <script>
@@ -1010,8 +1020,20 @@ function prettyDate(d) {
   return dt.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
 }
 
-/* ----- Core evaluation ----- */
-function evaluate(input) {
+/* ----- Lead-time tiering -----
+   An outstanding step is not a blocker if there is still real room to do it.
+   The planning model has already absorbed each step's lead time, so what
+   matters is the slack between today and the date that step is due. */
+function leadStatus(slackDays) {
+  if (slackDays >= 60) return "todo";   // outstanding, but ample room — on schedule, not done
+  if (slackDays >= 14) return "warn";   // doable, but it needs attention now
+  return "miss";                        // this step is now the binding constraint
+}
+
+/* ----- Core evaluation -----
+   `probe` suppresses the earliest-working-term search so the search itself
+   (which re-enters evaluate) cannot recurse. */
+function evaluate(input, probe) {
   const term = TERMS[input.target];
   const today = input.today;
 
@@ -1118,9 +1140,16 @@ function evaluate(input) {
     gates.push({ category: "Eligibility to defend",
       name: "Academic record clear (no outstanding I/S grades, not on probation)", status: "ok" });
   } else if (input.record === "grades") {
+    // The Graduate School audits the record when NOTIF arrives, so the NOTIF
+    // date — not the exam date — is what this has to clear ahead of.
+    const gradeSlack = daysBetween(today, effectiveNotifDeadline);
+    const gradeStatus = leadStatus(gradeSlack);
     gates.push({ category: "Eligibility to defend",
-      name: "Outstanding \"I\" or \"S\" grades on record", status: "miss",
-      detail: "You will not be allowed to sit for the Final Examination until any remaining \"I\" or \"S\" grades in letter-graded courses have been converted to letter grades. The Graduate School audits this when your NOTIF arrives — resolve it well before then." });
+      name: gradeStatus === "miss"
+        ? "Outstanding \"I\" or \"S\" grades — not enough room to clear them for this term"
+        : `Clear outstanding \"I\" or \"S\" grades before NOTIF (${prettyDate(effectiveNotifDeadline)})`,
+      status: gradeStatus,
+      detail: `You will not be allowed to sit for the Final Examination until any remaining \"I\" or \"S\" grades in letter-graded courses have been converted to letter grades. The Graduate School audits this when your NOTIF arrives${gradeStatus === "miss" ? `, and that deadline is ${prettyDate(effectiveNotifDeadline)} — too close to count on resolving them in time.` : ` — ${gradeSlack} days from today. Each one is a conversation with the instructor of record; start those now rather than close to the deadline.`}` });
   } else if (input.record === "probation") {
     gates.push({ category: "Eligibility to defend",
       name: "On academic probation", status: "miss",
@@ -1154,35 +1183,54 @@ function evaluate(input) {
   }
 
   // ===== NOTIF READINESS — can you fill it out? =====
-  // Chair draft
+  // Chair draft. Outstanding is not the same as too late: score it against the
+  // slack remaining before chair approval is actually due for this term.
+  const chairSlack = daysBetween(today, chairApprovalBy);
   if (input.chairDraft === "yes") {
     gates.push({ category: "NOTIF readiness (can you file it?)",
       name: "Chair has reviewed and approved a complete draft", status: "ok" });
   } else {
+    const st = leadStatus(chairSlack);
     gates.push({ category: "NOTIF readiness (can you file it?)",
-      name: "Chair has not yet approved a complete draft", status: "miss",
-      detail: "NOTIF should not be filed until your chair has reviewed and approved a complete draft for distribution to the rest of the committee. \"Sent but not reviewed\" doesn't satisfy this." });
+      name: st === "miss"
+        ? "Chair approval of a complete draft — no room left for this term"
+        : `Chair needs to approve a complete draft by ${prettyDate(chairApprovalBy)}`,
+      status: st,
+      detail: st === "miss"
+        ? `Chair approval would have to happen by ${prettyDate(chairApprovalBy)} to hold this term's dates, which leaves no working room. NOTIF should not be filed until your chair has reviewed and approved a complete draft for distribution. \"Sent but not reviewed\" doesn't satisfy this.`
+        : `${chairSlack} days from today. NOTIF should not be filed until your chair has reviewed and approved a complete draft for distribution to the rest of the committee — \"sent but not reviewed\" doesn't satisfy this. ${st === "warn" ? "That is a real deadline now; get the complete draft to your chair." : "There is room here, but the draft has to be complete when it goes."}` });
   }
 
-  // Committee review
+  // Committee review — same principle: score against the distribution deadline.
+  const distSlack = daysBetween(today, committeeDistBy);
+  const distStatus = leadStatus(distSlack);
+  const distWhen = distStatus === "miss"
+    ? `Distribution would have to have happened by ${prettyDate(committeeDistBy)} to hold this term's dates.`
+    : `Distribution is due by ${prettyDate(committeeDistBy)} — ${distSlack} days from today.`;
   if (input.committee === "all") {
     gates.push({ category: "NOTIF readiness (can you file it?)",
       name: "All committee members have reviewed at least some part", status: "ok" });
   } else if (input.committee === "some") {
     gates.push({ category: "NOTIF readiness (can you file it?)",
-      name: "Not all committee members have reviewed",
-      status: "miss",
-      detail: "Get something substantive to the remaining committee members. The EDL Dissertation Defense page asks for every committee member to have reviewed at least some part before NOTIF — and you verify this on the form itself." });
+      name: distStatus === "miss"
+        ? "Remaining committee members have not reviewed — no room left for this term"
+        : "Get writing to the remaining committee members",
+      status: distStatus,
+      detail: `${distWhen} The EDL Dissertation Defense page asks for every committee member to have reviewed at least some part before NOTIF — and you verify this on the form itself. You are part of the way there.` });
   } else if (input.committee === "chair") {
     gates.push({ category: "NOTIF readiness (can you file it?)",
-      name: "Only chair has reviewed; other members have not",
-      status: "miss",
-      detail: "The EDL Dissertation Defense page asks for every committee member — not just the chair — to have reviewed at least some part of the dissertation before NOTIF. Distribute writing to all members." });
+      name: distStatus === "miss"
+        ? "Only chair has reviewed — no room left for this term"
+        : "Distribute writing beyond your chair to the full committee",
+      status: distStatus,
+      detail: `${distWhen} The EDL Dissertation Defense page asks for every committee member — not just the chair — to have reviewed at least some part of the dissertation before NOTIF.` });
   } else {
     gates.push({ category: "NOTIF readiness (can you file it?)",
-      name: "Committee has not reviewed anything substantive",
-      status: "miss",
-      detail: "No committee member has seen substantive writing. This blocks NOTIF and therefore blocks scheduling the defense." });
+      name: distStatus === "miss"
+        ? "Committee has not seen substantive writing — no room left for this term"
+        : "Get substantive writing to your committee",
+      status: distStatus,
+      detail: `${distWhen} Every committee member needs to have reviewed at least some part of the dissertation before NOTIF can be filed.` });
   }
 
   // ===== NOTIF TIMING — when must it be filed? =====
@@ -1310,6 +1358,23 @@ function evaluate(input) {
   } else {
     verdict = "ON TRACK";
     reason = `Nothing procedural is standing in your way for ${term.label}. The dates below are yours to hit. What remains is the work itself — committee feedback, revision, and the dissertation holding up in the room.`;
+  }
+
+  // ===== Earliest term that actually works on these same answers =====
+  // A verdict that only says "not this one" leaves the student to guess which
+  // term is theirs. Find it and name it. Suppressed under `probe` so the
+  // search cannot re-enter itself.
+  let earliestWorkingTerm = null;
+  let earliestWorkingIsSelected = false;
+  if (!probe && verdict !== "ON TRACK" && verdict !== "TIGHT") {
+    for (const key of TERM_ORDER) {
+      const r = evaluate({ ...input, target: key }, true);
+      if (r.verdict === "ON TRACK" || r.verdict === "TIGHT") {
+        earliestWorkingTerm = TERMS[key];
+        earliestWorkingIsSelected = key === term.key;
+        break;
+      }
+    }
   }
 
   // Build timeline
@@ -1610,6 +1675,8 @@ function evaluate(input) {
     gates,
     verdict,
     reason,
+    earliestWorkingTerm,
+    earliestWorkingIsSelected,
     timelineEvents,
     nextTermSuggestion,
     nextActions,
@@ -1699,6 +1766,7 @@ function renderVerdict(result) {
       <div class="term-name">${result.term.label}</div>
       <div class="value">${result.verdict}</div>
       <p class="reason">${result.reason}</p>
+      ${result.earliestWorkingTerm ? `<p class="verdict-open-door">On these same answers, the earliest term that does work is <strong>${result.earliestWorkingTerm.label}</strong> — select it above to see its dates.</p>` : ""}
       <span class="footnote">This is a procedural read of your timeline. The work itself — writing, analysis, committee feedback — happens between you and your committee.</span>
     </div>
   `;
@@ -1816,8 +1884,10 @@ function renderChecklist(result) {
     if (!groups[cat] || groups[cat].length === 0) return;
     html += `<li class="cat-heading"><span class="cat-label">${cat}</span></li>`;
     groups[cat].forEach(g => {
-      const cls = g.status; // ok | warn | miss
-      const mark = g.status === "ok" ? "✓" : g.status === "warn" ? "!" : "✗";
+      const cls = g.status; // ok | todo | warn | miss
+      const mark = g.status === "ok" ? "✓"
+        : g.status === "todo" ? "○"
+        : g.status === "warn" ? "!" : "✗";
       const detail = g.detail ? `<span class="detail">${g.detail}</span>` : "";
       html += `<li class="${cls}"><span class="mark">${mark}</span><span>${g.name}${detail}</span></li>`;
     });
@@ -1864,6 +1934,10 @@ function buildTextReport(result) {
   lines.push("");
   lines.push("VERDICT: " + result.verdict);
   lines.push(result.reason);
+  if (result.earliestWorkingTerm) {
+    lines.push("");
+    lines.push(`On these same answers, the earliest term that does work is ${result.earliestWorkingTerm.label}.`);
+  }
   lines.push("");
   lines.push("(This is a procedural read of the timeline. The work itself — writing, analysis,");
   lines.push("committee feedback — happens between the student and the committee.)");
@@ -1940,7 +2014,9 @@ function buildTextReport(result) {
     lines.push("");
     lines.push("  " + cat.toUpperCase());
     groups[cat].forEach(g => {
-      const mark = g.status === "ok" ? "[OK]" : g.status === "warn" ? "[!]" : "[X]";
+      const mark = g.status === "ok" ? "[OK]"
+        : g.status === "todo" ? "[ ]"
+        : g.status === "warn" ? "[!]" : "[X]";
       lines.push("    " + mark + " " + g.name);
       if (g.detail) {
         lines.push(wrapText(g.detail, 76, "        "));

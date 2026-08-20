@@ -4,7 +4,7 @@ Read this before changing anything. It records decisions that were argued throug
 
 **Owner:** John B. Nash, DGS, Educational Leadership Studies, University of Kentucky.
 **Live:** https://jbnash.github.io/defense-readiness/
-**Current version:** v13 (footer marker is the source of truth).
+**Current version:** v14 (footer marker is the source of truth).
 
 ---
 
@@ -66,6 +66,12 @@ An earlier version of the summer caveat claimed students sometimes use the late-
 
 **Footer points to authoritative sources, not to itself.** DGS office phone first, then the DGS Manual, SharePoint, and Registrar's calendar. An earlier version said "use this tool first — before asking your chair or DGS." That was too presumptuous and was cut.
 
+**Outstanding steps are scored against their own slack, not treated as blockers.** `leadStatus(slackDays)` tiers any not-yet-done step: ≥60 days of room → `todo`, ≥14 → `warn`, otherwise `miss`. It backs the chair-approval, committee-distribution, and outstanding-I/S-grades gates, each measured against the date that step is actually due (`chairApprovalBy`, `committeeDistBy`, `effectiveNotifDeadline`). Rationale: the lead-time model has *already* absorbed each step's duration, so a step with 494 days of runway is a scheduled action, not a failure. Before this, a defense-ready student who simply hadn't distributed yet got `NOT YET` for every term out to Summer 2028.
+
+**`todo` is a fourth checklist status, rendered as a blue ○ (`[ ]` in plain text).** It is deliberately not the green ✓ — an outstanding item must not look complete — and deliberately not a warning. It counts toward neither `misses` nor `warns`, so it cannot move the verdict.
+
+**Every unreachable verdict names the earliest term that does work.** `evaluate(input, probe)` takes a second argument; when falsy, the function walks `TERM_ORDER` re-entering itself with `probe = true` and returns the first term scoring `ON TRACK` or `TIGHT` as `earliestWorkingTerm`. The `probe` flag is the recursion guard — do not remove it. The line is rendered separately in `renderVerdict` (HTML) and `buildTextReport` (plain text); keep `result.reason` free of markup so the clipboard report stays clean.
+
 **Enroll-in-767-and-drop-it is not a sanctioned path** and must never appear as one. It circulates as student folklore; the Graduate School does not endorse it.
 
 ---
@@ -88,6 +94,7 @@ Fall 2026 – Summer 2027 use the Registrar's published dates and are verified a
 
 ## Open questions and pending items
 
+- **Term-independent `NOT YET` for early-stage progress.** `draftRank <= 1` (still collecting data, or earlier) returns `NOT YET` for *every* term in the window, including ones two years out, and `earliestWorkingTerm` therefore comes back null. This is partly deliberate — it is the origin-story principle that the writing, not the calendar, is the bottleneck — but the verbatim paragraph it prints says "the next term is a real target," which is incoherent when every term says it and wrong for the last term in the list. Needs a decision: keep as-is, or let the gate open once a term is far enough out. Not changed unilaterally because the paragraph is protected.
 - **Can a student defend in the same term their second 767 completes?** The manual says two semesters are required "before they can graduate," not before the exam — which reads like yes. Currently coded as a warn with "confirm with your DGS." Resolve when known.
 - **767 S/U grading:** whether the S grades must be consecutive, and what consequences follow from U grades. Christine at the Graduate School is looking into it; expected to land with the new ARs. Not encoded — don't guess.
 - **International students** are not handled at all. The manual has a substantial section (F-1 students defending in spring aren't required to register for summer; those defending and submitting in summer should register for 767 or 748; those who defend in summer but haven't submitted by the fall SEVIS deadline must enroll full-time). Real trap for a population that can lose status. Would need a form question and a conditional results block.
